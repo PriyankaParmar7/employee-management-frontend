@@ -1,0 +1,84 @@
+<div class="login-page">
+
+    <!-- Left Side -->
+    <div class="login-left">
+
+        <div class="brand">
+            <h1>EmpManage</h1>
+        </div>
+
+        <h2>Enterprise Workforce<br> & Leave Management</h2>
+
+        <p>
+            Manage employees, teams, departments and leaves
+            from one centralized platform.
+        </p>
+
+        <div class="features">
+            <span>Role-Based Access Control</span>
+            <span>Automated Leave Tracking</span>
+            <span>Multi-tier Team Management</span>
+        </div>
+
+    </div>
+
+
+    <!-- Right Side -->
+    <div class="login-right">
+
+        <div class="login-card">
+
+            <h2>Welcome back</h2>
+
+            <p class="subtitle">
+                Sign in to continue to your account
+            </p>
+
+            <form #loginForm="ngForm" (ngSubmit)="login(loginForm)">
+
+                <label for="username">Username</label>
+
+                <input id="username" 
+                    name="username"
+                    type="text" 
+                    placeholder="Enter your username"
+                    [(ngModel)]="username"  
+                    required  
+                    #usernameInput="ngModel" >
+
+                @if (usernameInput.invalid && (usernameInput.touched || loginForm.submitted)) {
+                        <small class="error-message">Please enter your username.</small>
+
+} 
+
+                <label for="password">Password</label>
+
+                <input id="password" name="password" type="password" placeholder="Enter your password"
+                    [(ngModel)]="password"   required  #passwordInput="ngModel">
+
+
+                @if (passwordInput.invalid && (passwordInput.touched || loginForm.submitted)) {
+                <small class="error-message">Please enter your password.</small>
+}
+
+                <button type="submit">
+                    Sign In
+                </button>
+
+            </form>
+
+        
+
+            <div class="divider">
+                <span>OR</span>
+            </div>
+
+            <button class="admin-button">
+                Create Initial Admin
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
