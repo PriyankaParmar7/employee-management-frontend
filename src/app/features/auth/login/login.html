@@ -1,13 +1,13 @@
 <div class="login-page">
 
-    <!-- Left Side -->
+    <!-- Left Side: Branding -->
     <div class="login-left">
 
         <div class="brand">
             <h1>EmpManage</h1>
         </div>
 
-        <h2>Enterprise Workforce<br> & Leave Management</h2>
+        <h2>Enterprise Workforce<br> &amp; Leave Management</h2>
 
         <p>
             Manage employees, teams, departments and leaves
@@ -23,61 +23,210 @@
     </div>
 
 
-    <!-- Right Side -->
+    <!-- Right Side: Authentication Cards -->
     <div class="login-right">
 
-        <div class="login-card">
+        <!-- =========================
+             SIGN IN CARD
+             ========================= -->
 
-            <h2>Welcome back</h2>
+        @if (!forgotPasswordMode) {
+            <div class="login-card">
 
-            <p class="subtitle">
-                Sign in to continue to your account
-            </p>
+                <h2>Welcome back</h2>
 
-            <form #loginForm="ngForm" (ngSubmit)="login(loginForm)">
+                <p class="subtitle">
+                    Sign in to continue to your account
+                </p>
 
-                <label for="username">Username</label>
+                <form
+                    #loginForm="ngForm"
+                    (ngSubmit)="login(loginForm)"
+                >
 
-                <input id="username" 
-                    name="username"
-                    type="text" 
-                    placeholder="Enter your username"
-                    [(ngModel)]="username"  
-                    required  
-                    #usernameInput="ngModel" >
+                    <!-- Username -->
+                    <label for="username">Username</label>
 
-                @if (usernameInput.invalid && (usernameInput.touched || loginForm.submitted)) {
-                        <small class="error-message">Please enter your username.</small>
+                    <input
+                        id="username"
+                        name="username"
+                        type="text"
+                        placeholder="Enter your username"
+                        [(ngModel)]="username"
+                        required
+                        #usernameInput="ngModel"
+                    >
 
-} 
+                    @if (
+                        usernameInput.invalid &&
+                        (usernameInput.touched || loginForm.submitted)
+                    ) {
+                        <small class="error-message">
+                            Please enter your username.
+                        </small>
+                    }
 
-                <label for="password">Password</label>
 
-                <input id="password" name="password" type="password" placeholder="Enter your password"
-                    [(ngModel)]="password"   required  #passwordInput="ngModel">
+                    <!-- Password -->
+                    <label for="password">Password</label>
+
+                    <input
+                        id="password"
+                        name="password"
+                        type="password"
+                        placeholder="Enter your password"
+                        [(ngModel)]="password"
+                        required
+                        #passwordInput="ngModel"
+                    >
+
+                    @if (
+                        passwordInput.invalid &&
+                        (passwordInput.touched || loginForm.submitted)
+                    ) {
+                        <small class="error-message">
+                            Please enter your password.
+                        </small>
+                    }
 
 
-                @if (passwordInput.invalid && (passwordInput.touched || loginForm.submitted)) {
-                <small class="error-message">Please enter your password.</small>
-}
+                    <!-- Forgot Password Link -->
+                    <div class="forgot-password-link">
+                        <a
+                            href="#"
+                            (click)="openForgotPassword(); $event.preventDefault()"
+                        >
+                            Forgot password?
+                        </a>
+                    </div>
 
-                <button type="submit">
-                    Sign In
-                </button>
 
-            </form>
+                    <!-- Sign In Button -->
+                    <button type="submit">
+                        Sign In
+                    </button>
 
-        
+                </form>
 
-            <div class="divider">
-                <span>OR</span>
             </div>
+        }
 
-            <button class="admin-button">
-                Create Initial Admin
-            </button>
 
-        </div>
+        <!-- =========================
+             FORGOT PASSWORD CARD
+             ========================= -->
+
+        @if (forgotPasswordMode) {
+            <div class="login-card forgot-card">
+
+                <!-- Email Icon -->
+                <div class="forgot-icon" aria-hidden="true">
+
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        width="28"
+                        height="28"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    >
+                        <rect
+                            x="3"
+                            y="5"
+                            width="18"
+                            height="14"
+                            rx="3"
+                        ></rect>
+
+                        <path d="m3 7 9 6 9-6"></path>
+                    </svg>
+
+                </div>
+
+
+                <!-- Heading -->
+                <h2>Reset your password</h2>
+
+                <p class="subtitle">
+                    No worries! Enter your registered email address
+                    and we'll help you regain access.
+                </p>
+
+
+                <!-- Forgot Password Form -->
+                <form
+                    #forgotForm="ngForm"
+                    (ngSubmit)="forgotPassword(forgotForm)"
+                >
+
+                    <label for="forgotEmail">
+                        Email address
+                    </label>
+
+                    <input
+                        id="forgotEmail"
+                        name="forgotEmail"
+                        type="email"
+                        placeholder="Enter your registered email"
+                        [(ngModel)]="forgotPasswordEmail"
+                        required
+                        email
+                        #emailInput="ngModel"
+                    >
+
+                    @if (
+                        emailInput.invalid &&
+                        (emailInput.touched || forgotForm.submitted)
+                    ) {
+                        <small class="error-message">
+                            Please enter a valid email address.
+                        </small>
+                    }
+
+
+                    <!-- Reset Password Button -->
+                    <button
+                        type="submit"
+                        [disabled]="forgotForm.invalid"
+                    >
+                        Reset Password
+                    </button>
+
+                </form>
+
+
+                <!-- API Response Message -->
+                @if (forgotPasswordMessage) {
+                    <p
+                        class="forgot-password-message"
+                        [class.success-message]="forgotPasswordSuccess"
+                        [class.failure-message]="!forgotPasswordSuccess"
+                        role="status"
+                        aria-live="polite"
+                    >
+                        {{ forgotPasswordMessage }}
+                    </p>
+                }
+
+
+                <!-- Back to Sign In -->
+                <div class="back-to-login">
+
+                    <a
+                        href="#"
+                        (click)="backToSignIn(); $event.preventDefault()"
+                    >
+                        <span aria-hidden="true">←</span>
+                        Back to Sign In
+                    </a>
+
+                </div>
+
+            </div>
+        }
 
     </div>
 

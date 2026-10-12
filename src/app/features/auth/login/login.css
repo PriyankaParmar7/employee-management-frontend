@@ -330,4 +330,269 @@ form button:hover {
     max-width: 450px;
   }
 }
-```
+
+/* =========================
+   FORGOT PASSWORD LINK
+   ========================= */
+
+.forgot-password-link {
+  display: flex;
+  justify-content: flex-end;
+  margin: 0 0 18px 0;
+}
+
+.forgot-password-link a {
+  color: #2563eb;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.forgot-password-link a:hover {
+  color: #1d4ed8;
+  text-decoration: underline;
+}
+
+
+/* =========================
+   FORGOT PASSWORD FORM
+   ========================= */
+
+.forgot-password-form {
+  margin-top: 10px;
+}
+
+.forgot-password-form h2 {
+  margin: 0;
+  font-size: 27px;
+  font-weight: 700;
+  color: #172033;
+}
+
+.forgot-password-form .subtitle {
+  margin: 8px 0 28px 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #64748b;
+}
+
+.forgot-password-form form {
+  display: flex;
+  flex-direction: column;
+}
+
+.forgot-password-form label {
+  margin-bottom: 7px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #334155;
+}
+
+.forgot-password-form input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 13px;
+  margin-bottom: 18px;
+  border: 1px solid #cbd5e1;
+  border-radius: 7px;
+  background: white;
+  font-size: 14px;
+  color: #1e293b;
+  outline: none;
+}
+
+.forgot-password-form input::placeholder {
+  color: #94a3b8;
+}
+
+.forgot-password-form input:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+}
+
+.forgot-password-form form button {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 7px;
+  background: #2563eb;
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.forgot-password-form form button:hover {
+  background: #1d4ed8;
+}
+
+
+/* =========================
+   FORGOT PASSWORD MESSAGE
+   ========================= */
+
+.forgot-password-message {
+  margin: 18px 0;
+  padding: 12px;
+  border-radius: 7px;
+  background: #eff6ff;
+  color: #1d4ed8;
+  font-size: 13px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+
+/* =========================
+   BACK TO SIGN IN
+   ========================= */
+
+.forgot-password-form .forgot-password-link {
+  justify-content: center;
+  margin: 22px 0 0;
+}
+
+/* =========================
+   POLISHED FORGOT PASSWORD
+   ========================= */
+
+.forgot-card {
+  max-width: 440px;
+  padding: 44px 40px;
+  border: 1px solid #eef2f8;
+  border-radius: 18px;
+  box-shadow: 0 20px 60px rgba(30, 41, 59, 0.10);
+  animation: forgotCardEnter 0.3s ease-out;
+}
+
+.forgot-icon {
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 26px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #eff6ff, #dbeafe);
+  color: #2563eb;
+}
+
+.forgot-card h2 {
+  font-size: 30px;
+  line-height: 1.2;
+  letter-spacing: -0.8px;
+  color: #172033;
+}
+
+.forgot-card .subtitle {
+  margin: 12px 0 30px;
+  font-size: 14px;
+  line-height: 1.75;
+  color: #64748b;
+}
+
+.forgot-card label {
+  margin-bottom: 9px;
+  font-size: 13px;
+  color: #334155;
+}
+
+.forgot-card input {
+  min-height: 49px;
+  padding: 13px 15px;
+  margin-bottom: 22px;
+  border-color: #dbe3ef;
+  border-radius: 9px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.forgot-card input:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.10);
+}
+
+.forgot-card form button {
+  min-height: 49px;
+  border-radius: 9px;
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  box-shadow: 0 5px 12px rgba(37, 99, 235, 0.16);
+}
+
+.forgot-card form button:hover:not(:disabled) {
+  background: linear-gradient(135deg, #1d4ed8, #1e40af);
+  box-shadow: 0 7px 16px rgba(37, 99, 235, 0.24);
+  transform: translateY(-1px);
+}
+
+.forgot-card form button:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.back-to-login {
+  display: flex;
+  justify-content: center;
+  margin-top: 26px;
+  padding-top: 20px;
+  border-top: 1px solid #eef2f7;
+}
+
+.back-to-login a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: #475569;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.back-to-login a span {
+  font-size: 17px;
+  transition: transform 0.2s ease;
+}
+
+.back-to-login a:hover {
+  color: #2563eb;
+  text-decoration: none;
+}
+
+.back-to-login a:hover span {
+  transform: translateX(-3px);
+}
+
+.forgot-password-message {
+  margin-top: 18px;
+  padding: 13px 14px;
+  border-radius: 9px;
+  font-size: 13px;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+@keyframes forgotCardEnter {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .forgot-card {
+    padding: 34px 25px;
+    border-radius: 14px;
+  }
+
+  .forgot-card h2 {
+    font-size: 27px;
+  }
+}
