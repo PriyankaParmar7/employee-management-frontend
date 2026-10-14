@@ -1,1 +1,288 @@
-<p>dashboard works!</p>
+<div class="app-shell">
+  <aside class="sidebar">
+    <div class="logo">
+      <span class="logo-mark">▰</span>
+      <span>EmpManage</span>
+    </div>
+
+    <div class="sidebar-menu">
+      <p class="menu-label">MAIN MENU</p>
+
+      <a class="menu-item active" routerLink="/dashboard">
+        <span>▦</span> Dashboard
+      </a>
+      <a class="menu-item" routerLink="/employees">
+        <span>♙</span> Employees
+      </a>
+      <a class="menu-item" routerLink="/departments">
+        <span>▦</span> Departments
+      </a>
+      <a class="menu-item" routerLink="/teams">
+        <span>♧</span> Teams
+      </a>
+      <a class="menu-item" routerLink="/designations">
+        <span>♙</span> Designations
+      </a>
+      <a class="menu-item" routerLink="/leaves">
+        <span>▢</span> Leave Management
+      </a>
+      <a class="menu-item" routerLink="/profile">
+        <span>♙</span> My Profile
+      </a>
+    </div>
+
+    <div class="sidebar-footer">
+      <div class="user-avatar">PR</div>
+      <div class="user-details">
+        <strong>Priyanka</strong>
+        <span class="role-pill">● Admin</span>
+      </div>
+    </div>
+
+    <button class="logout-button" type="button">
+      <span>⇥</span> Logout
+    </button>
+  </aside>
+
+  <main class="main-area">
+    <header class="topbar">
+      <button class="menu-toggle" type="button" aria-label="Menu">☰</button>
+      <div class="system-status">
+        <span></span> System Online
+      </div>
+
+      <div class="topbar-user">
+        <span class="bell">♧<i></i></span>
+        <div class="top-avatar">PR</div>
+        <div class="top-user-details">
+          <strong>Priyanka</strong>
+          <span class="role-pill">● Admin</span>
+        </div>
+        <span class="chevron">⌄</span>
+      </div>
+    </header>
+
+    <div class="page-content">
+      <section class="welcome-banner">
+        <div class="welcome-copy">
+          <div class="welcome-meta">
+            <span class="role-pill">● Admin</span>
+            <span>Saturday, October 3, 2026</span>
+          </div>
+          <h1>Welcome back, Priyanka! 👋</h1>
+          <p>
+            Enterprise overview of your workforce hierarchy, departments,
+            cross-functional teams, and leave activities.
+          </p>
+        </div>
+
+        <div class="welcome-actions">
+          <button class="primary-button" type="button">
+            <span>＋</span> Add Employee
+          </button>
+          <button class="secondary-button" type="button">
+            <span>▢</span> Leave Hub
+          </button>
+        </div>
+      </section>
+
+      <section class="kpi-grid">
+        <article class="kpi-card">
+          <div class="kpi-heading">
+            <span>TOTAL<br>EMPLOYEES</span>
+            <span class="kpi-icon pink">♙</span>
+          </div>
+          <h2>{{ totalEmployees() }}</h2>
+          <p>Registered workforce members</p>
+        </article>
+
+        <article class="kpi-card">
+          <div class="kpi-heading">
+            <span>DEPARTMENTS</span>
+            <span class="kpi-icon slate">▦</span>
+          </div>
+          <h2>{{ totalDepartments() }}</h2>
+          <p>Active business divisions</p>
+        </article>
+
+        <article class="kpi-card">
+          <div class="kpi-heading">
+            <span>TEAMS</span>
+            <span class="kpi-icon blue">♧</span>
+          </div>
+          <h2> {{ totalTeams() }}</h2>
+          <p>Functional squads</p>
+        </article>
+
+        <article class="kpi-card">
+          <div class="kpi-heading">
+            <span>DESIGNATIONS</span>
+            <span class="kpi-icon green">♙</span>
+          </div>
+          <h2>25</h2>
+          <p>Job titles &amp; roles</p>
+        </article>
+
+        <article class="kpi-card">
+          <div class="kpi-heading">
+            <span>PENDING LEAVES</span>
+            <span class="kpi-icon amber">◷</span>
+          </div>
+          <h2>{{ pendingLeaveCount() }}</h2>
+          <p>Awaiting review / action</p>
+        </article>
+      </section>
+      <section class="panel department-panel">
+        <div class="panel-heading">
+          <div>
+            <h2>Department Workforce Distribution</h2>
+            <p>Headcount and active teams across all organizational units</p>
+          </div>
+          <a routerLink="/departments">
+            View All Departments <span>→</span>
+          </a>
+        </div>
+
+
+
+        <div class="department-grid">
+          @for (department of departments(); track department.id) {
+          <article class="department-card">
+            <div class="department-top">
+              <strong>{{ department.name }}</strong>
+              <span>{{ department.totalEmployees }} members</span>
+            </div>
+
+            <div class="progress-track">
+              <div [style.width]="totalEmployees() > 0
+            ? (department.totalEmployees / totalEmployees() * 100) + '%'
+            : '0%'">
+              </div>
+            </div>
+
+            <div class="department-bottom">
+              <span>{{ department.totalTeams }} Teams</span>
+              <span>
+                {{ totalEmployees() > 0
+                ? (department.totalEmployees / (totalEmployees()-1) * 100 | number:'1.0-0')
+                : 0 }}% of staff
+              </span>
+            </div>
+          </article>
+          } @empty {
+          <p>No departments found.</p>
+          }
+        </div>
+      </section>
+
+
+      <section class="bottom-grid">
+        <div class="panel workforce-panel">
+          <div class="panel-heading">
+            <div>
+              <h2>Workforce Directory</h2>
+              <p>Latest registered employees &amp; positions</p>
+            </div>
+            <a routerLink="/employees">View all <span>→</span></a>
+          </div>
+
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>EMPLOYEE</th>
+                  <th>DEPARTMENT</th>
+                  <th>DESIGNATION</th>
+                  <th>STATUS</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                @if (employeesLoading) {
+                <tr>
+                  <td colspan="4">Loading employees...</td>
+                </tr>
+                } @else if (employeesError) {
+                <tr>
+                  <td colspan="4">{{ employeesError }}</td>
+                </tr>
+                } @else if (employees.length === 0) {
+                <tr>
+                  <td colspan="4">No employees found.</td>
+                </tr>
+                } @else {
+                @for (employee of employees; track employee.id) {
+                <tr>
+                  <td>
+                    <div class="employee-cell">
+                      <span>
+                        {{
+                        employee.name.trim()
+                        .split(' ')
+                        .filter(part => part.length > 0)
+                        .slice(0, 2)
+                        .map(part => part[0].toUpperCase())
+                        .join('')
+                        }}
+                      </span>
+                      <div>
+                        {{ employee.name.trim() }}
+                        <small>{{ employee.email }}</small>
+                      </div>
+                    </div>
+                  </td>
+
+                  <td>{{ employee.department || '—' }}</td>
+                  <td>{{ employee.designation || '—' }}</td>
+
+                  <td>
+                    <span class="status-pill">
+                      ● {{ employee.isActive ? 'Active' : 'Inactive' }}
+                    </span>
+                  </td>
+                </tr>
+                }
+                }
+              </tbody>
+
+            </table>
+          </div>
+        </div>
+
+     
+<div class="panel leave-panel">
+  <div class="panel-heading">
+    <div>
+      <h2>Recent Leave Requests</h2>
+      <p>Leave applications awaiting review</p>
+    </div>
+    <a routerLink="/leaves">View all <span>→</span></a>
+  </div>
+
+  <div class="empty-leaves">
+    @if (pendingLeaves.length > 0) {
+      @for (leave of pendingLeaves; track leave.id) {
+        <div class="leave-request-item">
+          <strong>{{ leave.employeeName.trim() }}</strong>
+
+          <p>{{ leave.leaveType }} · {{ leave.teamName }}</p>
+
+          <p>
+            {{ leave.startDate | date:'dd MMM yyyy' }}
+            – {{ leave.endDate | date:'dd MMM yyyy' }}
+          </p>
+
+          <p>Reason: {{ leave.reason }}</p>
+
+          <span class="status-pill">
+            ● {{ leave.status }}
+          </span>
+        </div>
+      }
+    } @else {
+      <div class="calendar-icon">▢</div>
+      <strong>No pending leaves</strong>
+      <p>All leave requests are up to date.</p>
+    }
+  </div>
+</div>

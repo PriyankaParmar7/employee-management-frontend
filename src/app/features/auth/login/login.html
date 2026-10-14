@@ -1,3 +1,4 @@
+
 <div class="login-page">
 
     <!-- Left Side: Branding -->
@@ -22,14 +23,10 @@
 
     </div>
 
-
     <!-- Right Side: Authentication Cards -->
     <div class="login-right">
 
-        <!-- =========================
-             SIGN IN CARD
-             ========================= -->
-
+        <!-- SIGN IN CARD -->
         @if (!forgotPasswordMode) {
             <div class="login-card">
 
@@ -66,7 +63,6 @@
                         </small>
                     }
 
-
                     <!-- Password -->
                     <label for="password">Password</label>
 
@@ -89,6 +85,9 @@
                         </small>
                     }
 
+            
+                    
+                    
 
                     <!-- Forgot Password Link -->
                     <div class="forgot-password-link">
@@ -100,7 +99,6 @@
                         </a>
                     </div>
 
-
                     <!-- Sign In Button -->
                     <button type="submit">
                         Sign In
@@ -111,11 +109,7 @@
             </div>
         }
 
-
-        <!-- =========================
-             FORGOT PASSWORD CARD
-             ========================= -->
-
+        <!-- FORGOT PASSWORD CARD -->
         @if (forgotPasswordMode) {
             <div class="login-card forgot-card">
 
@@ -146,7 +140,6 @@
 
                 </div>
 
-
                 <!-- Heading -->
                 <h2>Reset your password</h2>
 
@@ -154,7 +147,6 @@
                     No worries! Enter your registered email address
                     and we'll help you regain access.
                 </p>
-
 
                 <!-- Forgot Password Form -->
                 <form
@@ -186,7 +178,6 @@
                         </small>
                     }
 
-
                     <!-- Reset Password Button -->
                     <button
                         type="submit"
@@ -196,7 +187,6 @@
                     </button>
 
                 </form>
-
 
                 <!-- API Response Message -->
                 @if (forgotPasswordMessage) {
@@ -210,7 +200,6 @@
                         {{ forgotPasswordMessage }}
                     </p>
                 }
-
 
                 <!-- Back to Sign In -->
                 <div class="back-to-login">

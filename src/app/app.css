@@ -1,0 +1,40 @@
+
+:host {
+  display: block;
+  min-height: 100vh;
+  overflow: visible;
+}
+
+.app-shell {
+  min-height: 100vh;
+  height: auto;
+  overflow: visible;
+}
+
+.main-area {
+  min-height: 100vh;
+  height: auto;
+  overflow: visible;
+}
+
+.page-content {
+  height: auto;
+  overflow: visible;
+}
+
+
+html,
+body {
+  height: auto;
+  min-height: 100%;
+  overflow-y: auto !important;
+}
+
+body {
+  margin: 0;
+}
+
+app-root {
+  display: block;
+  min-height: 100vh;
+}

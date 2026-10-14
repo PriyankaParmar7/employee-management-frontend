@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { LoginData } from '../../../models/login-data';
 import { AuthService } from '../auth';
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-login',
@@ -13,15 +15,19 @@ export class Login {
 
   username = '';
   password = '';
-
+ 
   forgotPasswordMode = false;
   forgotPasswordEmail = '';
   forgotPasswordMessage = '';
   forgotPasswordSuccess = false;
 
-  constructor(private authService: AuthService) {}
+
+  constructor( private authService: AuthService,
+  private router: Router) {}
 
   login(form: NgForm) {
+     
+
 
     if (form.invalid) {
       return;
@@ -36,8 +42,10 @@ export class Login {
       next: (response) => {
         console.log('Login successful:', response);
         localStorage.setItem('token', response.token);
+          this.router.navigate(['/dashboard']);
       },
       error: (error) => {
+        
         console.log('Login failed:', error);
       }
     });
