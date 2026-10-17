@@ -1,7 +1,5 @@
-
 :host {
   display: block;
-  min-height: 100vh;
   color: #10213c;
   font-family: Arial, Helvetica, sans-serif;
   font-size: 13px;
@@ -9,217 +7,6 @@
 
 * {
   box-sizing: border-box;
-}
-
-.app-shell {
-  display: flex;
-  min-height: 100vh;
-  background: #f7f9fc;
-}
-
-.sidebar {
-  width: 222px;
-  flex: 0 0 222px;
-  display: flex;
-  flex-direction: column;
-  background: #fff;
-  border-right: 1px solid #e1e8f1;
-}
-
-.logo {
-  height: 60px;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  padding: 0 20px;
-  border-bottom: 1px solid #e1e8f1;
-  color: #17233c;
-  font-size: 14px;
-  font-weight: 800;
-}
-
-.logo-mark {
-  color: #fb3156;
-  font-size: 20px;
-}
-
-.sidebar-menu {
-  padding: 18px 10px;
-}
-
-.menu-label {
-  margin: 0 10px 12px;
-  color: #91a0b8;
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: .6px;
-}
-
-.menu-item {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  min-height: 36px;
-  padding: 10px 12px;
-  margin-bottom: 3px;
-  border-radius: 7px;
-  color: #253956;
-  text-decoration: none;
-  font-size: 12px;
-}
-
-.menu-item > span {
-  width: 16px;
-  color: #91a4bf;
-  font-size: 17px;
-}
-
-.menu-item:hover,
-.menu-item.active {
-  background: #fff0f2;
-  color: #fb3156;
-}
-
-.menu-item.active > span {
-  color: #fb3156;
-}
-
-.sidebar-footer {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-top: auto;
-  padding: 18px 17px 8px;
-  border-top: 1px solid #e1e8f1;
-}
-
-.user-avatar,
-.top-avatar,
-.employee-cell > span {
-  display: grid;
-  place-items: center;
-  flex-shrink: 0;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background: #fff0f2;
-  color: #fb3156;
-  font-size: 11px;
-}
-
-.user-details,
-.top-user-details {
-  display: grid;
-  gap: 4px;
-}
-
-.user-details strong,
-.top-user-details strong {
-  font-size: 12px;
-}
-
-.role-pill {
-  display: inline-block;
-  width: fit-content;
-  padding: 3px 8px;
-  border: 1px solid #e4d8ff;
-  border-radius: 20px;
-  background: #f6f0ff;
-  color: #6725cb;
-  font-size: 10px;
-  white-space: nowrap;
-}
-
-.logout-button {
-  margin: 12px 16px 18px;
-  padding: 8px 4px;
-  border: 0;
-  background: none;
-  color: #fb3156;
-  text-align: left;
-  cursor: pointer;
-}
-
-.main-area {
-  flex: 1;
-  min-width: 0;
-}
-
-.topbar {
-  height: 60px;
-  display: flex;
-  align-items: center;
-  gap: 22px;
-  padding: 0 28px;
-  background: #fff;
-  border-bottom: 1px solid #e1e8f1;
-}
-
-.menu-toggle {
-  padding: 4px;
-  border: 0;
-  background: transparent;
-  color: #536680;
-  font-size: 18px;
-  cursor: pointer;
-}
-
-.system-status {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  padding: 6px 10px;
-  border: 1px solid #e2e9f3;
-  border-radius: 20px;
-  color: #71829d;
-  font-size: 11px;
-}
-
-.system-status > span {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: #12bd8a;
-}
-
-.topbar-user {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-left: auto;
-}
-
-.bell {
-  position: relative;
-  margin-right: 8px;
-  color: #596a83;
-  font-size: 20px;
-}
-
-.bell i {
-  position: absolute;
-  top: 0;
-  right: -2px;
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: #fb3156;
-}
-
-.top-avatar {
-  width: 30px;
-  height: 30px;
-}
-
-.chevron {
-  margin-left: 2px;
-  color: #66758d;
-}
-
-.page-content {
-  display: grid;
-  gap: 20px;
-  padding: 20px;
 }
 
 .welcome-banner {
@@ -233,6 +20,23 @@
   border-radius: 17px;
   background: linear-gradient(110deg, #fff 0%, #fff8f8 55%, #fff0f2 100%);
   box-shadow: 0 1px 3px #182b4510;
+}
+
+/* Dashboard section spacing */
+.welcome-banner {
+  margin-bottom: 20px;
+}
+
+.kpi-grid {
+  margin-bottom: 20px;
+}
+
+.department-panel {
+  margin-bottom: 20px;
+}
+
+.bottom-grid {
+  margin-top: 20px;
 }
 
 .welcome-meta {
@@ -492,8 +296,15 @@ td {
 }
 
 .employee-cell > span {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
   width: 30px;
   height: 30px;
+  border-radius: 50%;
+  background: #fff0f2;
+  color: #fb3156;
+  font-size: 11px;
 }
 
 .employee-cell small {
@@ -548,12 +359,31 @@ td {
   font-size: 11px;
 }
 
-@media (max-width: 1150px) {
-  .sidebar {
-    width: 190px;
-    flex-basis: 190px;
-  }
+.leave-request-item {
+  width: 100%;
+  padding: 18px;
+  text-align: left;
+  border-bottom: 1px solid #e2e8f0;
+}
 
+.leave-request-item strong {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+.leave-request-item p {
+  margin: 6px 0;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.leave-request-item .status-pill {
+  display: inline-block;
+  margin-top: 8px;
+}
+
+@media (max-width: 1150px) {
   .kpi-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
@@ -568,35 +398,6 @@ td {
 }
 
 @media (max-width: 700px) {
-  .sidebar {
-    width: 100%;
-    flex-basis: auto;
-  }
-
-  .sidebar-menu {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 4px;
-  }
-
-  .sidebar-footer {
-    margin-top: 8px;
-  }
-
-  .topbar {
-    padding: 0 15px;
-  }
-
-  .top-user-details,
-  .chevron {
-    display: none;
-  }
-
-  .page-content {
-    gap: 14px;
-    padding: 12px;
-  }
-
   .welcome-banner {
     align-items: flex-start;
     flex-direction: column;
@@ -636,75 +437,27 @@ td {
   }
 }
 
+/* Restore dashboard vertical spacing */
+.welcome-banner {
+  margin-bottom: 20px;
+}
 
-/* Allow the full dashboard page to scroll vertically */
+.kpi-grid {
+  margin-bottom: 20px;
+}
 
+.department-panel {
+  margin-bottom: 20px;
+}
+
+.bottom-grid {
+  margin-top: 20px;
+}
+
+/* Give dashboard content comfortable spacing */
 :host {
   display: block;
-  height: 100%;
-}
-
-.app-shell {
-  display: flex;
-  height: 100vh;
-  overflow: hidden;
-}
-
-.sidebar {
-  flex: 0 0 243px;
-  height: 100%;
-  overflow-y: auto;
-}
-
-.main-area {
-  flex: 1;
-  min-width: 0;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
-
-.topbar {
-  flex: 0 0 auto;
-}
-
-.page-content {
-  flex: 1;
-  min-height: 0;
-  overflow-y: auto;
-  overflow-x: hidden;
-}
-
-.leave-request-item {
   width: 100%;
-  box-sizing: border-box;
+  min-height: 100%;
   padding: 18px;
-  text-align: left;
-  border-bottom: 1px solid #e2e8f0;
 }
-
-.leave-request-item strong {
-  display: block;
-  margin-bottom: 8px;
-  font-size: 14px;
-}
-
-.leave-request-item p {
-  margin: 6px 0;
-  font-size: 12px;
-  line-height: 1.5;
-}
-
-.leave-request-item .status-pill {
-  display: inline-block;
-  margin-top: 8px;
-
-}
-
-
-
-
-
-
-

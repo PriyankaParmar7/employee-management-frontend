@@ -1,0 +1,273 @@
+
+:host {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+}
+
+.app-shell {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+  background: #f8f7fb;
+  color: #27243a;
+  font-family: inherit;
+}
+
+.sidebar {
+  display: flex;
+  flex: 0 0 250px;
+  flex-direction: column;
+  width: 250px;
+  min-width: 250px;
+  height: 100%;
+  box-sizing: border-box;
+  padding: 24px 16px;
+  background: #fff;
+  border-right: 1px solid #eeecf3;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 10px 32px;
+  color: #302b46;
+  font-size: 21px;
+  font-weight: 750;
+}
+
+.logo-mark {
+  color: #e94b87;
+  font-size: 25px;
+}
+
+.sidebar-menu {
+  flex: 1;
+  min-height: 0;
+}
+
+.menu-label {
+  margin: 0 10px 14px;
+  color: #9692a5;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 6px;
+  padding: 12px;
+  border-radius: 8px;
+  color: #777387;
+  font-size: 13px;
+  text-decoration: none;
+  transition: background 0.2s, color 0.2s;
+}
+
+.menu-item > span {
+  width: 20px;
+  text-align: center;
+  font-size: 18px;
+}
+
+.menu-item:hover {
+  background: #faf0f5;
+  color: #d83a76;
+}
+
+.menu-item.active {
+  background: #fceaf1;
+  color: #d83a76;
+  font-weight: 650;
+}
+
+.sidebar-footer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 18px 8px 14px;
+  border-top: 1px solid #eeecf3;
+}
+
+.user-avatar,
+.top-avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #f8dce8;
+  color: #c73370;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.user-details,
+.top-user-details {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.user-details strong,
+.top-user-details strong {
+  font-size: 12px;
+}
+
+.role-pill {
+  color: #d83a76;
+  font-size: 11px;
+}
+
+.sidebar-footer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: auto;
+  padding: 18px 8px 14px;
+  border-top: 1px solid #eeecf3;
+  flex-shrink: 0;
+}
+
+.logout-button {
+  flex-shrink: 0;
+  width: 100%;
+  padding: 11px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: #777387;
+  font: inherit;
+  font-size: 13px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.logout-button:hover {
+  background: #faf0f5;
+  color: #d83a76;
+}
+
+.main-area {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  width: 0;
+  min-width: 0;
+  min-height: 0;
+}
+
+.topbar {
+  display: flex;
+  flex: 0 0 68px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  box-sizing: border-box;
+  padding: 0 26px;
+  background: #fff;
+  border-bottom: 1px solid #eeecf3;
+}
+
+.menu-toggle {
+  display: none;
+  border: 0;
+  background: transparent;
+  font-size: 21px;
+  cursor: pointer;
+}
+
+.system-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #777387;
+  font-size: 12px;
+}
+
+.system-status > span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #36bd83;
+}
+
+.topbar-user {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.bell {
+  position: relative;
+  color: #777387;
+  font-size: 20px;
+}
+
+.bell i {
+  position: absolute;
+  top: 1px;
+  right: -2px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #e94b87;
+}
+
+.chevron {
+  color: #777387;
+}
+
+.page-content {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    flex-basis: 200px;
+    width: 200px;
+    min-width: 200px;
+    padding: 18px 10px;
+  }
+
+  .topbar {
+    padding: 0 14px;
+  }
+
+  .top-user-details,
+  .system-status {
+    display: none;
+  }
+}
+
+@media (max-width: 520px) {
+  .sidebar {
+    flex-basis: 165px;
+    width: 165px;
+    min-width: 165px;
+  }
+
+  .logo {
+    padding-right: 4px;
+    padding-left: 4px;
+    font-size: 17px;
+  }
+
+  .menu-item {
+    gap: 7px;
+    padding: 10px 7px;
+    font-size: 12px;
+  }
+}

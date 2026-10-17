@@ -1,0 +1,70 @@
+
+<div class="employees-page">
+  <div class="page-header">
+    <div>
+      <h1>Employees Directory</h1>
+      <p>Manage your employees and their information.</p>
+    </div>
+
+    <button class="add-employee-btn">
+      <span>＋</span> Add Employee
+    </button>
+  </div>
+
+  <div class="filter-section">
+    <div class="search-box">
+      <span>⌕</span>
+      <input
+        type="text"
+        placeholder="Search employees..."
+      />
+    </div>
+
+    <select>
+      <option value="">All Departments</option>
+    </select>
+
+    <select>
+      <option value="">All Teams</option>
+    </select>
+
+    <select>
+      <option value="">All Designations</option>
+    </select>
+
+    <select>
+      <option value="">All Status</option>
+      <option value="active">Active</option>
+      <option value="inactive">Inactive</option>
+    </select>
+  </div>
+
+  <div class="table-heading">
+    <h2>All Employees</h2>
+    <span class="employee-count">0 employees</span>
+  </div>
+
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>EMPLOYEE</th>
+          <th>DEPARTMENT</th>
+          <th>TEAM</th>
+          <th>DESIGNATION</th>
+          <th>SUPERVISOR</th>
+          <th>STATUS</th>
+          <th>ACTIONS</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr>
+          <td colspan="7" class="empty-state">
+            No employees to display.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

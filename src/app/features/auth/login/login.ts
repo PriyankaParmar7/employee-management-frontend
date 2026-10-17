@@ -3,6 +3,7 @@ import { FormsModule, NgForm } from '@angular/forms';
 import { LoginData } from '../../../models/login-data';
 import { AuthService } from '../auth';
 import { Router } from '@angular/router';
+import { AuthSessionService } from '../auth-session.service';
 
 
 @Component({
@@ -15,18 +16,21 @@ export class Login {
 
   username = '';
   password = '';
- 
+
   forgotPasswordMode = false;
   forgotPasswordEmail = '';
   forgotPasswordMessage = '';
   forgotPasswordSuccess = false;
 
 
-  constructor( private authService: AuthService,
-  private router: Router) {}
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private authSession: AuthSessionService
+  ) { }
 
   login(form: NgForm) {
-     
+
 
 
     if (form.invalid) {
@@ -42,10 +46,11 @@ export class Login {
       next: (response) => {
         console.log('Login successful:', response);
         localStorage.setItem('token', response.token);
-          this.router.navigate(['/dashboard']);
+        this.authSession.startSession(response.token);
+        this.router.navigate(['/dashboard']);
       },
       error: (error) => {
-        
+
         console.log('Login failed:', error);
       }
     });
@@ -78,13 +83,13 @@ export class Login {
       this.forgotPasswordEmail.trim()
     ).subscribe({
       next: (response) => {
-  this.forgotPasswordMessage =
-    typeof response === 'string'
-      ? response
-      : 'If an account with this email exists, a temporary password has been sent.';
+        this.forgotPasswordMessage =
+          typeof response === 'string'
+            ? response
+            : 'If an account with this email exists, a temporary password has been sent.';
 
-  this.forgotPasswordSuccess = true;
-},
+        this.forgotPasswordSuccess = true;
+      },
       error: () => {
         this.forgotPasswordMessage =
           'Unable to process your request. Please try again.';

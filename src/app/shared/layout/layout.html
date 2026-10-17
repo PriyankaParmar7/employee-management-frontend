@@ -1,0 +1,94 @@
+
+<div class="app-shell">
+  <aside class="sidebar">
+    <div class="logo">
+      <span class="logo-mark">▰</span>
+      <span>EmpManage</span>
+    </div>
+
+    <div class="sidebar-menu">
+      <p class="menu-label">MAIN MENU</p>
+
+      <a class="menu-item"
+         routerLink="/dashboard"
+         routerLinkActive="active">
+        <span>▦</span> Dashboard
+      </a>
+
+      <a class="menu-item"
+         routerLink="/employees"
+         routerLinkActive="active">
+        <span>♙</span> Employees
+      </a>
+
+      <a class="menu-item"
+         routerLink="/departments"
+         routerLinkActive="active">
+        <span>▦</span> Departments
+      </a>
+
+      <a class="menu-item"
+         routerLink="/teams"
+         routerLinkActive="active">
+        <span>♧</span> Teams
+      </a>
+
+      <a class="menu-item"
+         routerLink="/designations"
+         routerLinkActive="active">
+        <span>♙</span> Designations
+      </a>
+
+      <a class="menu-item"
+         routerLink="/leaves"
+         routerLinkActive="active">
+        <span>▢</span> Leave Management
+      </a>
+
+      <a class="menu-item"
+         routerLink="/profile"
+         routerLinkActive="active">
+        <span>♙</span> My Profile
+      </a>
+    </div>
+
+    <div class="sidebar-footer">
+      <div class="user-avatar">PR</div>
+      <div class="user-details">
+        <strong>Priyanka</strong>
+        <span class="role-pill">● Admin</span>
+      </div>
+    </div>
+
+    <button class="logout-button" type="button">
+      <span>⇥</span> Logout
+    </button>
+  </aside>
+
+  <main class="main-area">
+    <header class="topbar">
+      <button class="menu-toggle" type="button" aria-label="Menu">
+        ☰
+      </button>
+
+      <div class="system-status">
+        <span></span> System Online
+      </div>
+
+      <div class="topbar-user">
+        <span class="bell">♧<i></i></span>
+        <div class="top-avatar">PR</div>
+        <div class="top-user-details">
+          <strong>Priyanka</strong>
+          <span class="role-pill">● Admin</span>
+        </div>
+        <span class="chevron">⌄</span>
+      </div>
+    </header>
+
+    <div class="page-content">
+      <router-outlet></router-outlet>
+    </div>
+  </main>
+</div>
+
