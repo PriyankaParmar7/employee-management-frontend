@@ -16,9 +16,6 @@ export interface TeamCountResponse {
   totalTeams: number;
 }
 
-export interface PendingLeave {
- 
-}
 
 export interface Department {
   id: number;

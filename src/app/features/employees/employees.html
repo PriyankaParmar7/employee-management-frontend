@@ -17,6 +17,9 @@
       <input
         type="text"
         placeholder="Search employees..."
+        [(ngModel)]="searchText"
+        (keydown.enter)="searchEmployees()"
+
       />
     </div>
 
@@ -40,8 +43,11 @@
   </div>
 
   <div class="table-heading">
+    
     <h2>All Employees</h2>
-    <span class="employee-count">0 employees</span>
+    <span class="employee-count">
+  {{ employees.length }} employees
+</span>
   </div>
 
   <div class="table-container">
@@ -59,12 +65,38 @@
       </thead>
 
       <tbody>
-        <tr>
-          <td colspan="7" class="empty-state">
-            No employees to display.
-          </td>
-        </tr>
-      </tbody>
+  @if (loading) {
+    <tr>
+      <td colspan="7" class="empty-state">
+        Loading employees...
+      </td>
+    </tr>
+  } @else if (errorMessage) {
+    <tr>
+      <td colspan="7" class="empty-state">
+        {{ errorMessage }}
+      </td>
+    </tr>
+  } @else if (employees.length === 0) {
+    <tr>
+      <td colspan="7" class="empty-state">
+        No employees to display.
+      </td>
+    </tr>
+  } @else {
+    @for (employee of employees; track employee.id) {
+      <tr>
+        <td>{{ employee.name }}</td>
+        <td>{{ employee.department }}</td>
+        <td>{{ employee.team }}</td>
+        <td>{{ employee.designation }}</td>
+        <td>{{ employee.supervisor }}</td>
+        <td>{{ employee.isActive ? 'Active' : 'Inactive' }}</td>
+        <td>—</td>
+      </tr>
+    }
+  }
+</tbody>
     </table>
   </div>
 </div>

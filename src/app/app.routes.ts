@@ -11,6 +11,11 @@ export const routes: Routes = [
   },
   {
     path: '',
+    redirectTo: 'login',
+    pathMatch: 'full'
+  },
+  {
+    path: '',
     component: Layout,
     children: [
       {
@@ -22,11 +27,6 @@ export const routes: Routes = [
       {
         path: 'employees',
         component: Employees
-      },
-      {
-        path: '',
-        redirectTo: 'dashboard',
-        pathMatch: 'full'
       }
     ]
   },

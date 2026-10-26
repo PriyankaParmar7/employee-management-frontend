@@ -38,7 +38,7 @@
   padding: 12px 18px;
   border: none;
   border-radius: 9px;
-  background: #e94b87;
+  background: #fb3156;
   color: white;
   font-size: 14px;
   font-weight: 600;
@@ -46,7 +46,7 @@
 }
 
 .add-employee-btn:hover {
-  background: #d83a76;
+  background: #fb3156;
 }
 
 .add-employee-btn span {

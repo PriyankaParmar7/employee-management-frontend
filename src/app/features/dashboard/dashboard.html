@@ -204,6 +204,7 @@
     </div>
 
     <div class="empty-leaves">
+      <p>Debug: {{ pendingLeaves.length }}</p>
       @if (pendingLeaves.length > 0) {
         @for (leave of pendingLeaves; track leave.id) {
           <div class="leave-request-item">
