@@ -6,12 +6,15 @@
       <p>Manage your employees and their information.</p>
     </div>
 
-    <button class="add-employee-btn">
-      <span>＋</span> Add Employee
-    </button>
-  </div>
+<button
+  type="button"
+  class="add-employee-btn"
+  (click)="isCreateEmployeeModalOpen = true">
+  <span>＋</span> Add Employee
+</button></div>
 
   <div class="filter-section">
+    <!-- Search by employee name -->
     <div class="search-box">
       <span>⌕</span>
       <input
@@ -19,35 +22,69 @@
         placeholder="Search employees..."
         [(ngModel)]="searchText"
         (keydown.enter)="searchEmployees()"
-
       />
     </div>
 
-    <select>
-      <option value="">All Departments</option>
+    <!-- Department filter -->
+    <select
+      [(ngModel)]="selectedDepartmentId"
+      (ngModelChange)="onDepartmentChange($event)"
+    >
+      <option [ngValue]="null">All Departments</option>
+
+      @for (department of departments; track department.id) {
+        <option [ngValue]="department.id">
+          {{ department.name }}
+        </option>
+      }
     </select>
 
-    <select>
-      <option value="">All Teams</option>
-    </select>
+    <!-- Team filter -->
+    
+<select
+  [(ngModel)]="selectedTeamId"
+  (ngModelChange)="searchEmployees()"
+>
+  <option [ngValue]="null">All Teams</option>
 
-    <select>
-      <option value="">All Designations</option>
-    </select>
+  @for (team of teams; track team.id) {
+    <option [ngValue]="team.id">
+      {{ team.name }}
+    </option>
+  }
+</select>
 
-    <select>
-      <option value="">All Status</option>
-      <option value="active">Active</option>
-      <option value="inactive">Inactive</option>
+
+    <!-- Designation filter -->
+    <select
+  [(ngModel)]="selectedDesignationId"
+  (ngModelChange)="searchEmployees()"
+>
+  <option [ngValue]="null">All Designations</option>
+
+  @for (designation of designations; track designation.id) {
+    <option [ngValue]="designation.id">
+      {{ designation.name }}
+    </option>
+  }
+</select>
+
+    <!-- Status filter -->
+    <select
+      [(ngModel)]="selectedStatus"
+      (ngModelChange)="searchEmployees()"
+    >
+      <option [ngValue]="null">All Statuses</option>
+      <option value="Active">Active</option>
+      <option value="Inactive">Inactive</option>
     </select>
   </div>
 
   <div class="table-heading">
-    
     <h2>All Employees</h2>
     <span class="employee-count">
-  {{ employees.length }} employees
-</span>
+      {{ employees.length }} employees
+    </span>
   </div>
 
   <div class="table-container">
@@ -65,38 +102,42 @@
       </thead>
 
       <tbody>
-  @if (loading) {
-    <tr>
-      <td colspan="7" class="empty-state">
-        Loading employees...
-      </td>
-    </tr>
-  } @else if (errorMessage) {
-    <tr>
-      <td colspan="7" class="empty-state">
-        {{ errorMessage }}
-      </td>
-    </tr>
-  } @else if (employees.length === 0) {
-    <tr>
-      <td colspan="7" class="empty-state">
-        No employees to display.
-      </td>
-    </tr>
-  } @else {
-    @for (employee of employees; track employee.id) {
-      <tr>
-        <td>{{ employee.name }}</td>
-        <td>{{ employee.department }}</td>
-        <td>{{ employee.team }}</td>
-        <td>{{ employee.designation }}</td>
-        <td>{{ employee.supervisor }}</td>
-        <td>{{ employee.isActive ? 'Active' : 'Inactive' }}</td>
-        <td>—</td>
-      </tr>
-    }
-  }
-</tbody>
+        @if (loading) {
+          <tr>
+            <td colspan="7" class="empty-state">
+              Loading employees...
+            </td>
+          </tr>
+        } @else if (errorMessage) {
+          <tr>
+            <td colspan="7" class="empty-state">
+              {{ errorMessage }}
+            </td>
+          </tr>
+        } @else if (employees.length === 0) {
+          <tr>
+            <td colspan="7" class="empty-state">
+              No employees to display.
+            </td>
+          </tr>
+        } @else {
+          @for (employee of employees; track employee.id) {
+            <tr>
+              <td>{{ employee.name }}</td>
+              <td>{{ employee.department }}</td>
+              <td>{{ employee.team }}</td>
+              <td>{{ employee.designation }}</td>
+              <td>{{ employee.supervisor }}</td>
+              <td>
+                {{ employee.isActive ? 'Active' : 'Inactive' }}
+              </td>
+              <td>—</td>
+            </tr>
+          }
+        }
+      </tbody>
     </table>
   </div>
 </div>
+
+

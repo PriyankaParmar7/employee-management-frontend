@@ -72,6 +72,22 @@ export interface PendingLeave {
   teamName: string;
 }
 
+
+export interface Team {
+  id: number;
+  name: string;
+  employeeCount: number;
+  teamHead: string;
+  isActive: boolean;
+}
+export interface Designation {
+  id: number;
+  name: string;
+  description: string;
+  isActive: boolean;
+  employeeCount: number;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -145,7 +161,7 @@ getDepartments(): Observable<Department[]> {
     { headers }
   );}
 
-  searchEmployees(
+searchEmployees(
   request: EmployeeSearchRequest
 ): Observable<EmployeeSearchResponse> {
   const token = localStorage.getItem('token');
@@ -157,6 +173,47 @@ getDepartments(): Observable<Department[]> {
   return this.http.post<EmployeeSearchResponse>(
     `${environment.apiUrl}/api/Employee/search`,
     request,
+    { headers }
+  );
+}
+
+
+getTeams(): Observable<Team[]> {
+  const token = localStorage.getItem('token');
+
+  const headers = new HttpHeaders({
+    Authorization: `Bearer ${token}`
+  });
+
+  return this.http.get<Team[]>(
+    `${environment.apiUrl}/api/Team`,
+    { headers }
+  );
+}
+
+
+getTeamsByDepartment(departmentId: number): Observable<Team[]> {
+  const token = localStorage.getItem('token');
+
+  const headers = new HttpHeaders({
+    Authorization: `Bearer ${token}`
+  });
+
+  return this.http.get<Team[]>(
+    `${environment.apiUrl}/api/Department/${departmentId}/teams`,
+    { headers }
+  );
+}
+
+getDesignations(): Observable<Designation[]> {
+  const token = localStorage.getItem('token');
+
+  const headers = new HttpHeaders({
+    Authorization: `Bearer ${token}`
+  });
+
+  return this.http.get<Designation[]>(
+    `${environment.apiUrl}/api/Designation`,
     { headers }
   );
 }
