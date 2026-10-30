@@ -1,4 +1,3 @@
-
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -15,7 +14,6 @@ export interface DepartmentCountResponse {
 export interface TeamCountResponse {
   totalTeams: number;
 }
-
 
 export interface Department {
   id: number;
@@ -72,7 +70,6 @@ export interface PendingLeave {
   teamName: string;
 }
 
-
 export interface Team {
   id: number;
   name: string;
@@ -80,12 +77,24 @@ export interface Team {
   teamHead: string;
   isActive: boolean;
 }
+
 export interface Designation {
   id: number;
   name: string;
   description: string;
   isActive: boolean;
   employeeCount: number;
+}
+
+export interface CreateEmployeeRequest {
+  username: string;
+  email: string;
+  name: string;
+  roleId: number;
+  departmentId: number | null;
+  teamId: number | null;
+  supervisorId: number | null;
+  designationId: number;
 }
 
 @Injectable({
@@ -110,115 +119,173 @@ export class DashboardService {
   }
 
   getDepartmentCount(): Observable<DepartmentCountResponse> {
-  const token = localStorage.getItem('token');
+    const token = localStorage.getItem('token');
 
-  const headers = new HttpHeaders({
-    Authorization: `Bearer ${token}`
-  });
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`
+    });
 
-  return this.http.get<DepartmentCountResponse>(
-    `${environment.apiUrl}/api/Department/count`,
-    { headers }
-  );
-}
+    return this.http.get<DepartmentCountResponse>(
+      `${environment.apiUrl}/api/Department/count`,
+      { headers }
+    );
+  }
 
-getTeamCount(): Observable<TeamCountResponse> {
-  const token = localStorage.getItem('token');
+  getTeamCount(): Observable<TeamCountResponse> {
+    const token = localStorage.getItem('token');
 
-  const headers = new HttpHeaders({
-    Authorization: `Bearer ${token}`
-  });
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`
+    });
 
-  return this.http.get<TeamCountResponse>(
-    `${environment.apiUrl}/api/Team/count`,
-    { headers }
-  );
-}
+    return this.http.get<TeamCountResponse>(
+      `${environment.apiUrl}/api/Team/count`,
+      { headers }
+    );
+  }
 
-getPendingLeaves(): Observable<PendingLeave[]>  {
-  const token = localStorage.getItem('token');
+  getPendingLeaves(): Observable<PendingLeave[]> {
+    const token = localStorage.getItem('token');
 
-  const headers = new HttpHeaders({
-    Authorization: `Bearer ${token}`
-  });
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`
+    });
 
-  return this.http.get<any[]>(
-    `${environment.apiUrl}/api/Leave/pending`,
-    { headers }
-  );
-}
+    return this.http.get<any[]>(
+      `${environment.apiUrl}/api/Leave/pending`,
+      { headers }
+    );
+  }
 
+  getDepartments(): Observable<Department[]> {
+    const token = localStorage.getItem('token');
 
-getDepartments(): Observable<Department[]> {
-  const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`
+    });
 
-  const headers = new HttpHeaders({
-    Authorization: `Bearer ${token}`
-  });
+    return this.http.get<Department[]>(
+      `${environment.apiUrl}/api/Department`,
+      { headers }
+    );
+  }
 
-  return this.http.get<Department[]>(
-    `${environment.apiUrl}/api/Department`,
-    { headers }
-  );}
+  searchEmployees(
+    request: EmployeeSearchRequest
+  ): Observable<EmployeeSearchResponse> {
+    const token = localStorage.getItem('token');
 
-searchEmployees(
-  request: EmployeeSearchRequest
-): Observable<EmployeeSearchResponse> {
-  const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`
+    });
 
-  const headers = new HttpHeaders({
-    Authorization: `Bearer ${token}`
-  });
+    return this.http.post<EmployeeSearchResponse>(
+      `${environment.apiUrl}/api/Employee/search`,
+      request,
+      { headers }
+    );
+  }
 
-  return this.http.post<EmployeeSearchResponse>(
-    `${environment.apiUrl}/api/Employee/search`,
-    request,
-    { headers }
-  );
-}
+  getTeams(): Observable<Team[]> {
+    const token = localStorage.getItem('token');
 
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`
+    });
 
-getTeams(): Observable<Team[]> {
-  const token = localStorage.getItem('token');
+    return this.http.get<Team[]>(
+      `${environment.apiUrl}/api/Team`,
+      { headers }
+    );
+  }
 
-  const headers = new HttpHeaders({
-    Authorization: `Bearer ${token}`
-  });
+  getTeamsByDepartment(departmentId: number): Observable<Team[]> {
+    const token = localStorage.getItem('token');
 
-  return this.http.get<Team[]>(
-    `${environment.apiUrl}/api/Team`,
-    { headers }
-  );
-}
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`
+    });
 
+    return this.http.get<Team[]>(
+      `${environment.apiUrl}/api/Department/${departmentId}/teams`,
+      { headers }
+    );
+  }
 
-getTeamsByDepartment(departmentId: number): Observable<Team[]> {
-  const token = localStorage.getItem('token');
+  getDesignations(): Observable<Designation[]> {
+    const token = localStorage.getItem('token');
 
-  const headers = new HttpHeaders({
-    Authorization: `Bearer ${token}`
-  });
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`
+    });
 
-  return this.http.get<Team[]>(
-    `${environment.apiUrl}/api/Department/${departmentId}/teams`,
-    { headers }
-  );
-}
+    return this.http.get<Designation[]>(
+      `${environment.apiUrl}/api/Designation`,
+      { headers }
+    );
+  }
 
-getDesignations(): Observable<Designation[]> {
-  const token = localStorage.getItem('token');
+  createEmployee(request: CreateEmployeeRequest): Observable<string> {
+    const token = localStorage.getItem('token');
 
-  const headers = new HttpHeaders({
-    Authorization: `Bearer ${token}`
-  });
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`
+    });
 
-  return this.http.get<Designation[]>(
-    `${environment.apiUrl}/api/Designation`,
-    { headers }
-  );
-}
+    return this.http.post(
+      `${environment.apiUrl}/api/Employee`,
+      request,
+      { headers, responseType: 'text' }
+    );
+  }
 
+  updateEmployeeStatus(id: number, isActive: boolean): Observable<string> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`
+    });
 
-  
+    return this.http.put(
+      `${environment.apiUrl}/api/Employee/${id}/status`,
+      { isActive },
+      { headers, responseType: 'text' }
+    );
+  }
 
+  deleteEmployee(id: number): Observable<string> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`
+    });
+
+    return this.http.delete(
+      `${environment.apiUrl}/api/Employee/${id}`,
+      { headers, responseType: 'text' }
+    );
+  }
+
+  getEmployeeById(id: number): Observable<Employee> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`
+    });
+
+    return this.http.get<Employee>(
+      `${environment.apiUrl}/api/Employee/${id}`,
+      { headers }
+    );
+  }
+
+  updateEmployee(id: number, request: any): Observable<string> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`
+    });
+
+    return this.http.put(
+      `${environment.apiUrl}/api/Employee/${id}`,
+      request,
+      { headers, responseType: 'text' }
+    );
+  }
 }

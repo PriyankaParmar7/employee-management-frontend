@@ -1,8 +1,6 @@
-
 import { Routes } from '@angular/router';
 import { Login } from './features/auth/login/login';
 import { Layout } from './shared/layout/layout';
-import { Employees } from './features/employees/employees';
 
 export const routes: Routes = [
   {
@@ -26,7 +24,9 @@ export const routes: Routes = [
       },
       {
         path: 'employees',
-        component: Employees
+        loadComponent: () =>
+          import('./features/employees/employees')
+            .then(m => m.Employees)
       }
     ]
   },

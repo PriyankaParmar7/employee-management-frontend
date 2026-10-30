@@ -1,4 +1,3 @@
-
 <section class="welcome-banner">
   <div class="welcome-copy">
     <div class="welcome-meta">
@@ -14,10 +13,10 @@
   </div>
 
   <div class="welcome-actions">
-    <button class="primary-button" type="button">
+    <button class="primary-button" type="button" routerLink="/employees">
       <span>＋</span> Add Employee
     </button>
-    <button class="secondary-button" type="button">
+    <button class="secondary-button" type="button" routerLink="/leaves">
       <span>▢</span> Leave Hub
     </button>
   </div>
@@ -103,7 +102,7 @@
           <span>
             {{
               totalEmployees() > 0
-                ? (department.totalEmployees / (totalEmployees() - 1) * 100 | number:'1.0-0')
+                ? (department.totalEmployees / totalEmployees() * 100 | number:'1.0-0')
                 : 0
             }}% of staff
           </span>
@@ -140,36 +139,29 @@
         </thead>
 
         <tbody>
-          @if (employeesLoading) {
+          @if (employeesLoading()) {
             <tr>
               <td colspan="4">Loading employees...</td>
             </tr>
-          } @else if (employeesError) {
+          } @else if (employeesError()) {
             <tr>
-              <td colspan="4">{{ employeesError }}</td>
+              <td colspan="4">{{ employeesError() }}</td>
             </tr>
-          } @else if (employees.length === 0) {
+          } @else if (employees().length === 0) {
             <tr>
               <td colspan="4">No employees found.</td>
             </tr>
           } @else {
-            @for (employee of employees; track employee.id) {
+            @for (employee of employees(); track employee.id) {
               <tr>
                 <td>
                   <div class="employee-cell">
                     <span>
-                      {{
-                        employee.name.trim()
-                          .split(' ')
-                          .filter(part => part.length > 0)
-                          .slice(0, 2)
-                          .map(part => part[0].toUpperCase())
-                          .join('')
-                      }}
+                      {{ getInitials(employee.name) }}
                     </span>
 
                     <div>
-                      {{ employee.name.trim() }}
+                      {{ employee.name || 'Unnamed' }}
                       <small>{{ employee.email }}</small>
                     </div>
                   </div>
@@ -204,20 +196,19 @@
     </div>
 
     <div class="empty-leaves">
-      <p>Debug: {{ pendingLeaves.length }}</p>
-      @if (pendingLeaves.length > 0) {
-        @for (leave of pendingLeaves; track leave.id) {
+      @if (pendingLeaves().length > 0) {
+        @for (leave of pendingLeaves(); track leave.id) {
           <div class="leave-request-item">
-            <strong>{{ leave.employeeName.trim() }}</strong>
+            <strong>{{ leave.employeeName || 'Unknown Employee' }}</strong>
 
-            <p>{{ leave.leaveType }} · {{ leave.teamName }}</p>
+            <p>{{ leave.leaveType }} · {{ leave.teamName || 'No Team' }}</p>
 
             <p>
               {{ leave.startDate | date:'dd MMM yyyy' }}
               – {{ leave.endDate | date:'dd MMM yyyy' }}
             </p>
 
-            <p>Reason: {{ leave.reason }}</p>
+            <p>Reason: {{ leave.reason || 'N/A' }}</p>
 
             <span class="status-pill">
               ● {{ leave.status }}

@@ -1,37 +1,54 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, signal, ChangeDetectorRef } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { DashboardService, Department, Employee, EmployeeSearchRequest, PendingLeave } from './dashboard.service';
 import { DatePipe, DecimalPipe } from '@angular/common';
+import { forkJoin, of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+import {
+  DashboardService,
+  Department,
+  Employee,
+  EmployeeSearchRequest,
+  PendingLeave
+} from './dashboard.service';
+
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [
-    RouterLink,
-    DatePipe,
-    DecimalPipe
-  ],
+  imports: [RouterLink, DatePipe, DecimalPipe],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css'
 })
-
-
 export class Dashboard implements OnInit {
+  isLoading = signal(true);
 
   totalEmployees = signal(0);
   totalDepartments = signal(0);
   totalTeams = signal(0);
   pendingLeaveCount = signal(0);
   departments = signal<Department[]>([]);
-  employees: Employee[] = [];
-  employeesLoading = false;
-  employeesError = '';
-  pendingLeaves: PendingLeave[] = [];
 
-  loadEmployees(): void {
-    this.employeesLoading = true;
-    this.employeesError = '';
+  employees = signal<Employee[]>([]);
+  employeesLoading = signal(false);
+  employeesError = signal('');
 
-    const request: EmployeeSearchRequest = {
+  pendingLeaves = signal<PendingLeave[]>([]);
+
+  constructor(
+    private dashboardService: DashboardService,
+    private cdr: ChangeDetectorRef
+  ) {}
+
+  ngOnInit(): void {
+    this.loadAllDashboardData();
+  }
+
+  // Uses forkJoin to fetch ALL dashboard endpoints simultaneously and render EVERYTHING together at once!
+  loadAllDashboardData(): void {
+    this.isLoading.set(true);
+    this.employeesLoading.set(true);
+    this.employeesError.set('');
+
+    const empRequest: EmployeeSearchRequest = {
       page: 1,
       pageSize: 6,
       search: '',
@@ -44,92 +61,85 @@ export class Dashboard implements OnInit {
       sortDescending: false
     };
 
-    this.dashboardService.searchEmployees(request).subscribe({
-      next: (response) => {
-        this.employees = response.employees;
-        this.employeesLoading = false;
+    forkJoin({
+      employeeCount: this.dashboardService.getEmployeeCount().pipe(
+        catchError((err) => {
+          console.error('[Dashboard API Error] Employee Count failed:', err);
+          return of({ totalEmployees: 0 });
+        })
+      ),
+      departmentCount: this.dashboardService.getDepartmentCount().pipe(
+        catchError((err) => {
+          console.error('[Dashboard API Error] Department Count failed:', err);
+          return of({ totalDepartments: 0 });
+        })
+      ),
+      departments: this.dashboardService.getDepartments().pipe(
+        catchError((err) => {
+          console.error('[Dashboard API Error] Departments list failed:', err);
+          return of([]);
+        })
+      ),
+      teamCount: this.dashboardService.getTeamCount().pipe(
+        catchError((err) => {
+          console.error('[Dashboard API Error] Team Count failed:', err);
+          return of({ totalTeams: 0 });
+        })
+      ),
+      employeeResult: this.dashboardService.searchEmployees(empRequest).pipe(
+        catchError((err) => {
+          console.error('[Dashboard API Error] Employees search failed:', err);
+          this.employeesError.set('Failed to load workforce directory.');
+          return of({ employees: [], totalRecords: 0, page: 1, pageSize: 6, totalPages: 0 });
+        })
+      ),
+      pendingLeaves: this.dashboardService.getPendingLeaves().pipe(
+        catchError((err) => {
+          console.error('[Dashboard API Error] Pending Leaves failed:', err);
+          return of([]);
+        })
+      )
+    }).subscribe({
+      next: (results) => {
+        console.log('[Dashboard Ready] All data loaded together:', results);
+
+        // 1. Set KPI Cards
+        this.totalEmployees.set(results.employeeCount.totalEmployees);
+        this.totalDepartments.set(results.departmentCount.totalDepartments);
+        this.departments.set(results.departments);
+        this.totalTeams.set(results.teamCount.totalTeams);
+
+        // 2. Set Workforce Directory
+        this.employees.set(results.employeeResult.employees || []);
+        this.employeesLoading.set(false);
+
+        // 3. Set Pending Leaves
+        const leavesList = results.pendingLeaves || [];
+        this.pendingLeaves.set(leavesList);
+        this.pendingLeaveCount.set(leavesList.length);
+
+        // 4. Mark loading finished & force change detection pass
+        this.isLoading.set(false);
+        this.cdr.markForCheck();
       },
-      error: (error) => {
-        console.error('Failed to load employees:', error);
-        this.employeesError = 'Unable to load employees.';
-        this.employeesLoading = false;
+      error: (fatalErr) => {
+        console.error('[Dashboard Fatal Error]', fatalErr);
+        this.isLoading.set(false);
+        this.employeesLoading.set(false);
+        this.cdr.markForCheck();
       }
     });
   }
 
- loadPendingLeaves(): void {
-  console.log('Loading pending leaves...');
-
-  this.dashboardService.getPendingLeaves().subscribe({
-  next: (leaves) => {
-  this.pendingLeaves = leaves;
-
-  console.log('pendingLeaves:', this.pendingLeaves);
-  console.log('pendingLeaves length:', this.pendingLeaves.length);
-},
-    error: (error) => {
-      console.error('Failed to load pending leaves:', error);
-      this.pendingLeaves = [];
-    }
-  });
-}
-
-  constructor(private dashboardService: DashboardService) { }
-
-  ngOnInit(): void {
-    this.dashboardService.getEmployeeCount().subscribe({
-      next: (response) => {
-        this.totalEmployees.set(response.totalEmployees);
-        console.log('Employee count loaded:', response.totalEmployees);
-      },
-      error: (error) => {
-        console.error('Failed to fetch employee count:', error);
-      }
-    });
-
-    this.dashboardService.getDepartmentCount().subscribe({
-      next: (response) => {
-        this.totalDepartments.set(response.totalDepartments);
-        console.log('Department count loaded:', response.totalDepartments);
-      },
-      error: (error) => {
-        console.error('Failed to fetch department count:', error);
-      }
-    });
-
-    this.dashboardService.getTeamCount().subscribe({
-      next: (response) => {
-        this.totalTeams.set(response.totalTeams);
-        console.log('Team count loaded:', response.totalTeams);
-      },
-      error: (error) => {
-        console.error('Failed to fetch team count:', error);
-      }
-    });
-
-    this.dashboardService.getPendingLeaves().subscribe({
-      next: (response) => {
-        this.pendingLeaveCount.set(response.length);
-        console.log('Pending leave count:', response.length);
-      },
-      error: (error) => {
-        console.error('Failed to fetch pending leaves:', error);
-      }
-    });
-
-    this.dashboardService.getDepartments().subscribe({
-      next: (response) => {
-        this.departments.set(response);
-        console.log('Departments loaded:', response);
-      },
-      error: (error) => {
-        console.error('Failed to fetch departments:', error);
-      }
-    });
-
-    this.loadEmployees();
-    this.loadPendingLeaves();
-
-
+  // Safe helper to extract initials
+  getInitials(name?: string): string {
+    if (!name || !name.trim()) return '??';
+    return name
+      .trim()
+      .split(' ')
+      .filter((part) => part.length > 0)
+      .slice(0, 2)
+      .map((part) => part[0].toUpperCase())
+      .join('');
   }
 }

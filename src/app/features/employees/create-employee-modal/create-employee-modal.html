@@ -1,0 +1,167 @@
+@if (isOpen) {
+  <div class="modal-backdrop" (click)="onClose()">
+    <div class="modal-card" (click)="$event.stopPropagation()">
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h2>Add New Employee</h2>
+        <button
+          type="button"
+          class="close-btn"
+          (click)="onClose()"
+          [disabled]="isSubmitting"
+          aria-label="Close"
+        >
+          ✕
+        </button>
+      </div>
+
+      <!-- Error Alert -->
+      @if (errorMessage) {
+        <div class="error-banner">
+          <span>⚠️</span> {{ errorMessage }}
+        </div>
+      }
+
+      <!-- Form Body: 2 Column Grid -->
+      <form (ngSubmit)="onSubmit()" class="modal-form">
+        <div class="form-grid">
+          <!-- Full Name -->
+          <div class="form-group">
+            <label for="fullName">Full Name <span class="required">*</span></label>
+            <input
+              id="fullName"
+              type="text"
+              name="fullName"
+              placeholder="e.g. John Doe"
+              [(ngModel)]="fullName"
+              required
+            />
+          </div>
+
+          <!-- Username -->
+          <div class="form-group">
+            <label for="username">Username <span class="required">*</span></label>
+            <input
+              id="username"
+              type="text"
+              name="username"
+              placeholder="e.g. jdoe"
+              [(ngModel)]="username"
+              required
+            />
+          </div>
+
+          <!-- Email Address -->
+          <div class="form-group">
+            <label for="email">Email Address <span class="required">*</span></label>
+            <input
+              id="email"
+              type="email"
+              name="email"
+              placeholder="john.doe@company.com"
+              [(ngModel)]="email"
+              required
+            />
+          </div>
+
+          <!-- System Role -->
+          <div class="form-group">
+            <label for="systemRole">System Role <span class="required">*</span></label>
+            <select
+              id="systemRole"
+              name="roleId"
+              [(ngModel)]="roleId"
+              required
+            >
+              @for (role of roles; track role.id) {
+                <option [ngValue]="role.id">{{ role.label }}</option>
+              }
+            </select>
+          </div>
+
+          <!-- Department -->
+          <div class="form-group">
+            <label for="department">Department</label>
+            <select
+              id="department"
+              name="departmentId"
+              [(ngModel)]="departmentId"
+              (ngModelChange)="onDepartmentChange($event)"
+            >
+              <option [ngValue]="null">Select Department</option>
+              @for (dept of departments; track dept.id) {
+                <option [ngValue]="dept.id">{{ dept.name }}</option>
+              }
+            </select>
+          </div>
+
+          <!-- Team -->
+          <div class="form-group">
+            <label for="team">Team</label>
+            <select
+              id="team"
+              name="teamId"
+              [(ngModel)]="teamId"
+              [disabled]="!departmentId"
+            >
+              <option [ngValue]="null">Select Team</option>
+              @for (team of departmentTeams; track team.id) {
+                <option [ngValue]="team.id">{{ team.name }}</option>
+              }
+            </select>
+          </div>
+
+          <!-- Designation -->
+          <div class="form-group">
+            <label for="designation">Designation <span class="required">*</span></label>
+            <select
+              id="designation"
+              name="designationId"
+              [(ngModel)]="designationId"
+              required
+            >
+              <option [ngValue]="null">Select Designation</option>
+              @for (desig of designations; track desig.id) {
+                <option [ngValue]="desig.id">{{ desig.name }}</option>
+              }
+            </select>
+          </div>
+
+          <!-- Supervisor -->
+          <div class="form-group">
+            <label for="supervisor">Supervisor</label>
+            <select
+              id="supervisor"
+              name="supervisorId"
+              [(ngModel)]="supervisorId"
+            >
+              <option [ngValue]="null">None</option>
+              @for (sup of supervisors; track sup.id) {
+                <option [ngValue]="sup.id">{{ sup.name }}</option>
+              }
+            </select>
+          </div>
+        </div>
+
+        <!-- Modal Footer Actions -->
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-cancel"
+            (click)="onClose()"
+            [disabled]="isSubmitting"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            class="btn btn-save"
+            [disabled]="isSubmitting"
+          >
+            {{ isSubmitting ? 'Saving...' : 'Save Employee' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+}
