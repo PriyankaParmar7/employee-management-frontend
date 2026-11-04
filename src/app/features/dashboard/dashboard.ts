@@ -11,8 +11,6 @@ import {
   PendingLeave
 } from './dashboard.service';
 
-import { AuthSessionService } from '../auth/auth-session.service';
-
 @Component({
   selector: 'app-dashboard',
   standalone: true,
@@ -34,25 +32,17 @@ export class Dashboard implements OnInit {
   employeesError = signal('');
 
   pendingLeaves = signal<PendingLeave[]>([]);
-  today = new Date();
-  loggedInUserName = '';
-  loggedInUserRole = '';
 
   constructor(
     private dashboardService: DashboardService,
-    private cdr: ChangeDetectorRef,
-    private authSession: AuthSessionService
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
-  this.loggedInUserName = this.authSession.getLoggedInUserName();
-  this.loggedInUserRole = this.authSession.getLoggedInUserRole();
+    this.loadAllDashboardData();
+  }
 
-
-  this.loadAllDashboardData();
-}
-
-  // forkJoin: Saari APIs ek sath call hongi aur ek hi sath render hongi!
+  // Uses forkJoin to fetch ALL dashboard endpoints simultaneously and render EVERYTHING together at once!
   loadAllDashboardData(): void {
     this.isLoading.set(true);
     this.employeesLoading.set(true);
@@ -74,38 +64,38 @@ export class Dashboard implements OnInit {
     forkJoin({
       employeeCount: this.dashboardService.getEmployeeCount().pipe(
         catchError((err) => {
-          console.error('[Dashboard Error] Employee Count failed:', err);
+          console.error('[Dashboard API Error] Employee Count failed:', err);
           return of({ totalEmployees: 0 });
         })
       ),
       departmentCount: this.dashboardService.getDepartmentCount().pipe(
         catchError((err) => {
-          console.error('[Dashboard Error] Department Count failed:', err);
+          console.error('[Dashboard API Error] Department Count failed:', err);
           return of({ totalDepartments: 0 });
         })
       ),
       departments: this.dashboardService.getDepartments().pipe(
         catchError((err) => {
-          console.error('[Dashboard Error] Departments list failed:', err);
+          console.error('[Dashboard API Error] Departments list failed:', err);
           return of([]);
         })
       ),
       teamCount: this.dashboardService.getTeamCount().pipe(
         catchError((err) => {
-          console.error('[Dashboard Error] Team Count failed:', err);
+          console.error('[Dashboard API Error] Team Count failed:', err);
           return of({ totalTeams: 0 });
         })
       ),
       employeeResult: this.dashboardService.searchEmployees(empRequest).pipe(
         catchError((err) => {
-          console.error('[Dashboard Error] Employees search failed:', err);
+          console.error('[Dashboard API Error] Employees search failed:', err);
           this.employeesError.set('Failed to load workforce directory.');
           return of({ employees: [], totalRecords: 0, page: 1, pageSize: 6, totalPages: 0 });
         })
       ),
       pendingLeaves: this.dashboardService.getPendingLeaves().pipe(
         catchError((err) => {
-          console.error('[Dashboard Error] Pending Leaves failed:', err);
+          console.error('[Dashboard API Error] Pending Leaves failed:', err);
           return of([]);
         })
       )
@@ -113,22 +103,22 @@ export class Dashboard implements OnInit {
       next: (results) => {
         console.log('[Dashboard Ready] All data loaded together:', results);
 
-        // 1. KPI Cards Set
+        // 1. Set KPI Cards
         this.totalEmployees.set(results.employeeCount.totalEmployees);
         this.totalDepartments.set(results.departmentCount.totalDepartments);
         this.departments.set(results.departments);
         this.totalTeams.set(results.teamCount.totalTeams);
 
-        // 2. Workforce Directory Set
+        // 2. Set Workforce Directory
         this.employees.set(results.employeeResult.employees || []);
         this.employeesLoading.set(false);
 
-        // 3. Pending Leaves Set
+        // 3. Set Pending Leaves
         const leavesList = results.pendingLeaves || [];
         this.pendingLeaves.set(leavesList);
         this.pendingLeaveCount.set(leavesList.length);
 
-        // 4. Finished Loading
+        // 4. Mark loading finished & force change detection pass
         this.isLoading.set(false);
         this.cdr.markForCheck();
       },

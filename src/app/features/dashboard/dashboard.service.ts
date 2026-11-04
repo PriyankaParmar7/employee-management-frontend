@@ -239,8 +239,7 @@ export class DashboardService {
     );
   }
 
-
-    updateEmployeeStatus(id: number, isActive: boolean): Observable<string> {
+  updateEmployeeStatus(id: number, isActive: boolean): Observable<string> {
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}`
@@ -264,5 +263,29 @@ export class DashboardService {
       { headers, responseType: 'text' }
     );
   }
-  
+
+  getEmployeeById(id: number): Observable<Employee> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`
+    });
+
+    return this.http.get<Employee>(
+      `${environment.apiUrl}/api/Employee/${id}`,
+      { headers }
+    );
+  }
+
+  updateEmployee(id: number, request: any): Observable<string> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`
+    });
+
+    return this.http.put(
+      `${environment.apiUrl}/api/Employee/${id}`,
+      request,
+      { headers, responseType: 'text' }
+    );
+  }
 }

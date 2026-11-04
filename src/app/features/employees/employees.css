@@ -1,5 +1,3 @@
-
-
 :host {
   display: block;
   height: 100%;
@@ -12,7 +10,6 @@
   font-family: inherit;
 }
 
-/* Page Header */
 .page-header {
   display: flex;
   justify-content: space-between;
@@ -33,7 +30,6 @@
   font-size: 14px;
 }
 
-/* "+ Add Employee" Button */
 .add-employee-btn {
   display: flex;
   align-items: center;
@@ -46,7 +42,6 @@
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.15s ease;
 }
 
 .add-employee-btn:hover {
@@ -58,7 +53,6 @@
   line-height: 1;
 }
 
-/* Filter Bar Section */
 .filter-section {
   display: flex;
   flex-wrap: wrap;
@@ -105,7 +99,6 @@
   outline: none;
 }
 
-/* Table Header Count */
 .table-heading {
   display: flex;
   align-items: center;
@@ -128,10 +121,10 @@
   font-weight: 600;
 }
 
-/* ⭐️ Table Container: Scrollbar sirf table ke andar rahega */
+/* Table container with internal scroll (Page won't stretch infinitely) */
 .table-container {
   width: 100%;
-  max-height: 540px;
+  max-height: 520px;
   overflow-y: auto;
   overflow-x: auto;
   border: 1px solid #eeecf3;
@@ -150,7 +143,7 @@ thead {
   background: #faf9fc;
 }
 
-/* ⭐️ Sticky Header: Rows scroll hongi par header hamesha upar freeze rahega */
+/* Sticky Header stays fixed while table rows scroll */
 th {
   position: sticky;
   top: 0;
@@ -166,11 +159,10 @@ th {
 }
 
 td {
-  padding: 16px 16px;
+  padding: 18px 16px;
   border-bottom: 1px solid #f0eef4;
   color: #514e63;
   font-size: 13px;
-  vertical-align: middle;
 }
 
 tbody tr:last-child td {
@@ -183,7 +175,7 @@ tbody tr:last-child td {
   text-align: center;
 }
 
-/* ⭐️ Status Pill Badge with Dot */
+/* Status Pill Badge (Matching Image 2) */
 .status-badge {
   display: inline-flex;
   align-items: center;
@@ -192,7 +184,6 @@ tbody tr:last-child td {
   border-radius: 20px;
   font-size: 12px;
   font-weight: 600;
-  letter-spacing: 0.2px;
 }
 
 .status-badge.active {
@@ -212,45 +203,42 @@ tbody tr:last-child td {
   background: currentColor;
 }
 
-/* ⭐️ Action Icons (Border aur background hata kar clean banaya) */
+/* Action Icons (Matching Image 2) */
 .actions-cell {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
 }
 
 .action-btn {
-  background: transparent !important;
-  border: none !important;
-  box-shadow: none !important;
-  outline: none !important;
-  color: #7b778d;
+  background: transparent;
+  border: none;
+  color: #807c93;
   cursor: pointer;
-  padding: 4px;
+  padding: 5px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   border-radius: 6px;
-  transition: color 0.15s ease, background 0.15s ease, transform 0.1s ease;
+  transition: color 0.15s, background 0.15s, transform 0.1s;
 }
 
 .action-btn:hover {
   color: #1f1c2e;
-  background: #f3f2f8 !important;
-  transform: scale(1.1);
-}
-
-.action-btn.status-btn:hover {
-  color: #27ae60;
-  background: #eafaf1 !important;
+  background: #f0eef6;
+  transform: scale(1.08);
 }
 
 .action-btn.delete-btn:hover {
   color: #e02444;
-  background: #fff1f3 !important;
+  background: #fff1f3;
 }
 
-/* Mobile Responsive */
+.action-btn.status-btn:hover {
+  color: #27ae60;
+  background: #eafaf1;
+}
+
 @media (max-width: 768px) {
   .employees-page {
     padding: 18px;
