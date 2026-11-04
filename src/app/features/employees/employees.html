@@ -86,7 +86,7 @@
     </span>
   </div>
 
-  <!-- Table Container (Scrollable inside table) -->
+  <!-- Table Container (Scroll limited to table) -->
   <div class="table-container">
     <table>
       <thead>
@@ -97,7 +97,7 @@
           <th>DESIGNATION</th>
           <th>SUPERVISOR</th>
           <th>STATUS</th>
-          <th>ACTIONS</th>
+          <th class="actions-header">ACTIONS</th>
         </tr>
       </thead>
 
@@ -123,22 +123,22 @@
         } @else {
           @for (employee of employees; track employee.id) {
             <tr>
-              <!-- Employee Name -->
-              <td>{{ employee.name }}</td>
+              <!-- Col 1: Employee Name -->
+              <td class="emp-name">{{ employee.name }}</td>
 
-              <!-- Department -->
+              <!-- Col 2: Department -->
               <td>{{ employee.department || '—' }}</td>
 
-              <!-- Team -->
+              <!-- Col 3: Team -->
               <td>{{ employee.team || '—' }}</td>
 
-              <!-- Designation -->
+              <!-- Col 4: Designation -->
               <td>{{ employee.designation || '—' }}</td>
 
-              <!-- Supervisor -->
+              <!-- Col 5: Supervisor -->
               <td>{{ employee.supervisor || '—' }}</td>
 
-              <!-- Status Badge with Dot (Matching Design) -->
+              <!-- Col 6: STATUS (Pill Badge with Dot) -->
               <td>
                 <span
                   class="status-badge"
@@ -150,30 +150,30 @@
                 </span>
               </td>
 
-              <!-- Actions Cell (4 Icons: View, Edit, Status Toggle, Delete) -->
+              <!-- Col 7: ACTIONS (Directly inside ACTIONS column!) -->
               <td>
                 <div class="actions-cell">
-                  <!-- 1. View Details (Eye) -->
+                  <!-- 1. View Details -->
                   <button
                     type="button"
                     class="action-btn"
                     title="View Details"
                     (click)="onView(employee)"
                   >
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                       <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                       <circle cx="12" cy="12" r="3"></circle>
                     </svg>
                   </button>
 
-                  <!-- 2. Edit Employee (Pencil) -->
+                  <!-- 2. Edit Employee -->
                   <button
                     type="button"
                     class="action-btn"
                     title="Edit Employee"
                     (click)="onEdit(employee)"
                   >
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                       <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
                       <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
                     </svg>
@@ -183,10 +183,10 @@
                   <button
                     type="button"
                     class="action-btn status-btn"
-                    [title]="employee.isActive ? 'Deactivate' : 'Activate'"
+                    [title]="employee.isActive ? 'Click to Deactivate' : 'Click to Activate'"
                     (click)="toggleStatus(employee)"
                   >
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                       <circle cx="12" cy="12" r="9"></circle>
                     </svg>
                   </button>
@@ -198,7 +198,7 @@
                     title="Delete Employee"
                     (click)="onDelete(employee)"
                   >
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                       <polyline points="3 6 5 6 21 6"></polyline>
                       <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
                     </svg>
@@ -212,7 +212,7 @@
     </table>
   </div>
 
-  <!-- Add Employee Modal Component -->
+  <!-- Create Employee Modal -->
   <app-create-employee-modal
     [isOpen]="isCreateEmployeeModalOpen"
     [departments]="departments"

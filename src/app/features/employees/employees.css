@@ -1,3 +1,5 @@
+
+
 :host {
   display: block;
   height: 100%;
@@ -10,6 +12,7 @@
   font-family: inherit;
 }
 
+/* Page Header */
 .page-header {
   display: flex;
   justify-content: space-between;
@@ -30,6 +33,7 @@
   font-size: 14px;
 }
 
+/* "+ Add Employee" Button */
 .add-employee-btn {
   display: flex;
   align-items: center;
@@ -42,6 +46,7 @@
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
+  transition: background 0.15s ease;
 }
 
 .add-employee-btn:hover {
@@ -53,6 +58,7 @@
   line-height: 1;
 }
 
+/* Filter Bar Section */
 .filter-section {
   display: flex;
   flex-wrap: wrap;
@@ -99,6 +105,7 @@
   outline: none;
 }
 
+/* Table Header Count */
 .table-heading {
   display: flex;
   align-items: center;
@@ -121,10 +128,10 @@
   font-weight: 600;
 }
 
-/* Table container with internal scroll (Page won't stretch infinitely) */
+/* ⭐️ Table Container: Scrollbar sirf table ke andar rahega */
 .table-container {
   width: 100%;
-  max-height: 520px;
+  max-height: 540px;
   overflow-y: auto;
   overflow-x: auto;
   border: 1px solid #eeecf3;
@@ -143,7 +150,7 @@ thead {
   background: #faf9fc;
 }
 
-/* Sticky Header stays fixed while table rows scroll */
+/* ⭐️ Sticky Header: Rows scroll hongi par header hamesha upar freeze rahega */
 th {
   position: sticky;
   top: 0;
@@ -159,10 +166,11 @@ th {
 }
 
 td {
-  padding: 18px 16px;
+  padding: 16px 16px;
   border-bottom: 1px solid #f0eef4;
   color: #514e63;
   font-size: 13px;
+  vertical-align: middle;
 }
 
 tbody tr:last-child td {
@@ -175,7 +183,7 @@ tbody tr:last-child td {
   text-align: center;
 }
 
-/* Status Pill Badge (Matching Image 2) */
+/* ⭐️ Status Pill Badge with Dot */
 .status-badge {
   display: inline-flex;
   align-items: center;
@@ -184,6 +192,7 @@ tbody tr:last-child td {
   border-radius: 20px;
   font-size: 12px;
   font-weight: 600;
+  letter-spacing: 0.2px;
 }
 
 .status-badge.active {
@@ -203,42 +212,45 @@ tbody tr:last-child td {
   background: currentColor;
 }
 
-/* Action Icons (Matching Image 2) */
+/* ⭐️ Action Icons (Border aur background hata kar clean banaya) */
 .actions-cell {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
 }
 
 .action-btn {
-  background: transparent;
-  border: none;
-  color: #807c93;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+  color: #7b778d;
   cursor: pointer;
-  padding: 5px;
+  padding: 4px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   border-radius: 6px;
-  transition: color 0.15s, background 0.15s, transform 0.1s;
+  transition: color 0.15s ease, background 0.15s ease, transform 0.1s ease;
 }
 
 .action-btn:hover {
   color: #1f1c2e;
-  background: #f0eef6;
-  transform: scale(1.08);
-}
-
-.action-btn.delete-btn:hover {
-  color: #e02444;
-  background: #fff1f3;
+  background: #f3f2f8 !important;
+  transform: scale(1.1);
 }
 
 .action-btn.status-btn:hover {
   color: #27ae60;
-  background: #eafaf1;
+  background: #eafaf1 !important;
 }
 
+.action-btn.delete-btn:hover {
+  color: #e02444;
+  background: #fff1f3 !important;
+}
+
+/* Mobile Responsive */
 @media (max-width: 768px) {
   .employees-page {
     padding: 18px;
