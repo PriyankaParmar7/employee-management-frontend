@@ -97,13 +97,22 @@ export interface CreateEmployeeRequest {
   designationId: number;
 }
 
+export interface UpdateEmployeeRequest {
+  name: string;
+  email: string;
+  departmentId: number | null;
+  teamId: number | null;
+  designationId: number;
+  supervisorId: number | null;
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class DashboardService {
   private apiUrl = `${environment.apiUrl}/api/Employee/count`;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   getEmployeeCount(): Observable<EmployeeCountResponse> {
     const token = localStorage.getItem('token');

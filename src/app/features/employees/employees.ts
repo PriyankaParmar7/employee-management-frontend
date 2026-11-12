@@ -18,12 +18,13 @@ import {
 } from '../dashboard/dashboard.service';
 
 import { CreateEmployeeModalComponent } from './create-employee-modal/create-employee-modal';
+import { EditEmployeeModelComponent } from './edit-employee-model/edit-employee-model';
 
 @Component({
   selector: 'app-employees',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, FormsModule, CreateEmployeeModalComponent],
+  imports: [CommonModule, FormsModule, CreateEmployeeModalComponent, EditEmployeeModelComponent],
   templateUrl: './employees.html',
   styleUrl: './employees.css'
 })
@@ -50,6 +51,9 @@ export class Employees implements OnInit {
   selectedStatus: string | null = null;
 
   isCreateEmployeeModalOpen = false;
+  isEditEmployeeModelOpen = false;
+  selectedEmployeeToEdit: Employee | null = null;
+
 
   // -------------------------------------------------------
   // Constructor
@@ -57,7 +61,7 @@ export class Employees implements OnInit {
   constructor(
     private dashboardService: DashboardService,
     private cdr: ChangeDetectorRef
-  ) {}
+  ) { }
 
   // -------------------------------------------------------
   // Lifecycle
@@ -228,7 +232,15 @@ export class Employees implements OnInit {
   // -------------------------------------------------------
 
   onEdit(employee: Employee): void {
-    alert(`Edit feature for ${employee.name} (ID: ${employee.id}) — coming soon!`);
+    this.selectedEmployeeToEdit = employee;
+    this.isEditEmployeeModelOpen = true;
+    this.cdr.markForCheck();
+  }
+
+  onEmployeeUpdated(): void {
+    this.isEditEmployeeModelOpen = false;
+    this.selectedEmployeeToEdit = null;
+    this.searchEmployees(); // Table auto refresh
   }
 
   // -------------------------------------------------------
@@ -279,4 +291,7 @@ export class Employees implements OnInit {
       }
     });
   }
+
+
+
 }

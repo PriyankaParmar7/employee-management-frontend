@@ -6,11 +6,7 @@
       <p>Manage your employees and their information.</p>
     </div>
 
-    <button
-      type="button"
-      class="add-employee-btn"
-      (click)="isCreateEmployeeModalOpen = true"
-    >
+    <button type="button" class="add-employee-btn" (click)="isCreateEmployeeModalOpen = true">
       <span>＋</span> Add Employee
     </button>
   </div>
@@ -20,58 +16,42 @@
     <!-- Search by employee name -->
     <div class="search-box">
       <span>⌕</span>
-      <input
-        type="text"
-        placeholder="Search employees..."
-        [(ngModel)]="searchText"
-        (keydown.enter)="searchEmployees()"
-      />
+      <input type="text" placeholder="Search employees..." [(ngModel)]="searchText"
+        (keydown.enter)="searchEmployees()" />
     </div>
 
     <!-- Department filter -->
-    <select
-      [(ngModel)]="selectedDepartmentId"
-      (ngModelChange)="onDepartmentChange($event)"
-    >
+    <select [(ngModel)]="selectedDepartmentId" (ngModelChange)="onDepartmentChange($event)">
       <option [ngValue]="null">All Departments</option>
       @for (department of departments; track department.id) {
-        <option [ngValue]="department.id">
-          {{ department.name }}
-        </option>
+      <option [ngValue]="department.id">
+        {{ department.name }}
+      </option>
       }
     </select>
 
     <!-- Team filter -->
-    <select
-      [(ngModel)]="selectedTeamId"
-      (ngModelChange)="searchEmployees()"
-    >
+    <select [(ngModel)]="selectedTeamId" (ngModelChange)="searchEmployees()">
       <option [ngValue]="null">All Teams</option>
       @for (team of teams; track team.id) {
-        <option [ngValue]="team.id">
-          {{ team.name }}
-        </option>
+      <option [ngValue]="team.id">
+        {{ team.name }}
+      </option>
       }
     </select>
 
     <!-- Designation filter -->
-    <select
-      [(ngModel)]="selectedDesignationId"
-      (ngModelChange)="searchEmployees()"
-    >
+    <select [(ngModel)]="selectedDesignationId" (ngModelChange)="searchEmployees()">
       <option [ngValue]="null">All Designations</option>
       @for (designation of designations; track designation.id) {
-        <option [ngValue]="designation.id">
-          {{ designation.name }}
-        </option>
+      <option [ngValue]="designation.id">
+        {{ designation.name }}
+      </option>
       }
     </select>
 
     <!-- Status filter -->
-    <select
-      [(ngModel)]="selectedStatus"
-      (ngModelChange)="searchEmployees()"
-    >
+    <select [(ngModel)]="selectedStatus" (ngModelChange)="searchEmployees()">
       <option [ngValue]="null">All Statuses</option>
       <option value="Active">Active</option>
       <option value="Inactive">Inactive</option>
@@ -103,122 +83,103 @@
 
       <tbody>
         @if (loading) {
-          <tr>
-            <td colspan="7" class="empty-state">
-              Loading employees...
-            </td>
-          </tr>
+        <tr>
+          <td colspan="7" class="empty-state">
+            Loading employees...
+          </td>
+        </tr>
         } @else if (errorMessage) {
-          <tr>
-            <td colspan="7" class="empty-state">
-              {{ errorMessage }}
-            </td>
-          </tr>
+        <tr>
+          <td colspan="7" class="empty-state">
+            {{ errorMessage }}
+          </td>
+        </tr>
         } @else if (employees.length === 0) {
-          <tr>
-            <td colspan="7" class="empty-state">
-              No employees to display.
-            </td>
-          </tr>
+        <tr>
+          <td colspan="7" class="empty-state">
+            No employees to display.
+          </td>
+        </tr>
         } @else {
-          @for (employee of employees; track employee.id) {
-            <tr>
-              <!-- Employee Name -->
-              <td>{{ employee.name }}</td>
+        @for (employee of employees; track employee.id) {
+        <tr>
+          <!-- Employee Name -->
+          <td>{{ employee.name }}</td>
 
-              <!-- Department -->
-              <td>{{ employee.department || '—' }}</td>
+          <!-- Department -->
+          <td>{{ employee.department || '—' }}</td>
 
-              <!-- Team -->
-              <td>{{ employee.team || '—' }}</td>
+          <!-- Team -->
+          <td>{{ employee.team || '—' }}</td>
 
-              <!-- Designation -->
-              <td>{{ employee.designation || '—' }}</td>
+          <!-- Designation -->
+          <td>{{ employee.designation || '—' }}</td>
 
-              <!-- Supervisor -->
-              <td>{{ employee.supervisor || '—' }}</td>
+          <!-- Supervisor -->
+          <td>{{ employee.supervisor || '—' }}</td>
 
-              <!-- Status Badge with Dot (Matching Design) -->
-              <td>
-                <span
-                  class="status-badge"
-                  [class.active]="employee.isActive"
-                  [class.inactive]="!employee.isActive"
-                >
-                  <span class="status-dot"></span>
-                  {{ employee.isActive ? 'Active' : 'Inactive' }}
-                </span>
-              </td>
+          <!-- Status Badge with Dot (Matching Design) -->
+          <td>
+            <span class="status-badge" [class.active]="employee.isActive" [class.inactive]="!employee.isActive">
+              <span class="status-dot"></span>
+              {{ employee.isActive ? 'Active' : 'Inactive' }}
+            </span>
+          </td>
 
-              <!-- Actions Cell (4 Icons: View, Edit, Status Toggle, Delete) -->
-              <td>
-                <div class="actions-cell">
-                  <!-- 1. View Details (Eye) -->
-                  <button
-                    type="button"
-                    class="action-btn"
-                    title="View Details"
-                    (click)="onView(employee)"
-                  >
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                      <circle cx="12" cy="12" r="3"></circle>
-                    </svg>
-                  </button>
+          <!-- Actions Cell (4 Icons: View, Edit, Status Toggle, Delete) -->
+          <td>
+            <div class="actions-cell">
+              <!-- 1. View Details (Eye) -->
+              <button type="button" class="action-btn" title="View Details" (click)="onView(employee)">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                  <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+              </button>
 
-                  <!-- 2. Edit Employee (Pencil) -->
-                  <button
-                    type="button"
-                    class="action-btn"
-                    title="Edit Employee"
-                    (click)="onEdit(employee)"
-                  >
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                      <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-                      <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-                    </svg>
-                  </button>
+              <!-- 2. Edit Employee (Pencil) -->
+              <button type="button" class="action-btn" title="Edit Employee" (click)="onEdit(employee)">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                  <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                </svg>
+              </button>
 
-                  <!-- 3. Toggle Status (Circle) -->
-                  <button
-                    type="button"
-                    class="action-btn status-btn"
-                    [title]="employee.isActive ? 'Deactivate' : 'Activate'"
-                    (click)="toggleStatus(employee)"
-                  >
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                      <circle cx="12" cy="12" r="9"></circle>
-                    </svg>
-                  </button>
+              <!-- 3. Toggle Status (Circle) -->
+              <button type="button" class="action-btn status-btn"
+                [title]="employee.isActive ? 'Deactivate' : 'Activate'" (click)="toggleStatus(employee)">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="9"></circle>
+                </svg>
+              </button>
 
-                  <!-- 4. Delete Employee (Trash) -->
-                  <button
-                    type="button"
-                    class="action-btn delete-btn"
-                    title="Delete Employee"
-                    (click)="onDelete(employee)"
-                  >
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                      <polyline points="3 6 5 6 21 6"></polyline>
-                      <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                    </svg>
-                  </button>
-                </div>
-              </td>
-            </tr>
-          }
+              <!-- 4. Delete Employee (Trash) -->
+              <button type="button" class="action-btn delete-btn" title="Delete Employee" (click)="onDelete(employee)">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="3 6 5 6 21 6"></polyline>
+                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                </svg>
+              </button>
+            </div>
+          </td>
+        </tr>
+        }
         }
       </tbody>
     </table>
   </div>
 
   <!-- Add Employee Modal Component -->
-  <app-create-employee-modal
-    [isOpen]="isCreateEmployeeModalOpen"
-    [departments]="departments"
-    [designations]="designations"
-    [supervisors]="employees"
-    (close)="isCreateEmployeeModalOpen = false"
-    (employeeCreated)="onEmployeeCreated()"
-  ></app-create-employee-modal>
+  <app-create-employee-modal [isOpen]="isCreateEmployeeModalOpen" [departments]="departments"
+    [designations]="designations" [supervisors]="employees" (close)="isCreateEmployeeModalOpen = false"
+    (employeeCreated)="onEmployeeCreated()"></app-create-employee-modal>
+
+  <!-- Edit Employee Modal -->
+  <app-edit-employee-model [isOpen]="isEditEmployeeModelOpen" [employee]="selectedEmployeeToEdit"
+    [departments]="departments" [designations]="designations" [supervisors]="employees"
+    (close)="isEditEmployeeModelOpen = false" (employeeUpdated)="onEmployeeUpdated()"></app-edit-employee-model>
 </div>

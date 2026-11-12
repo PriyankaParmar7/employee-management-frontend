@@ -1,0 +1,94 @@
+@if (isOpen) {
+<div class="modal-backdrop" (click)="onClose()">
+    <div class="modal-card" (click)="$event.stopPropagation()">
+        <!-- Modal Header -->
+        <div class="modal-header">
+            <h2>Edit Employee: {{ employee?.name }}</h2>
+            <button type="button" class="close-btn" (click)="onClose()" [disabled]="isSubmitting" aria-label="Close">
+                ✕
+            </button>
+        </div>
+
+        <!-- Error Alert -->
+        @if (errorMessage) {
+        <div class="error-banner">
+            <span>⚠️</span> {{ errorMessage }}
+        </div>
+        }
+
+        <!-- Form Body: 2 Column Grid -->
+        <form (ngSubmit)="onSubmit()" class="modal-form">
+            <div class="form-grid">
+                <!-- 1. Full Name -->
+                <div class="form-group">
+                    <label for="editFullName">Full Name <span class="required">*</span></label>
+                    <input id="editFullName" type="text" name="fullName" placeholder="e.g. system admin"
+                        [(ngModel)]="fullName" required />
+                </div>
+
+                <!-- 2. Email Address -->
+                <div class="form-group">
+                    <label for="editEmail">Email Address <span class="required">*</span></label>
+                    <input id="editEmail" type="email" name="email" placeholder="e.g. priyankaaparmar0707@gmail.com"
+                        [(ngModel)]="email" required />
+                </div>
+
+                <!-- 3. Department -->
+                <div class="form-group">
+                    <label for="editDepartment">Department</label>
+                    <select id="editDepartment" name="departmentId" [(ngModel)]="departmentId"
+                        (ngModelChange)="onDepartmentChange($event)">
+                        <option [ngValue]="null">None</option>
+                        @for (dept of departments; track dept.id) {
+                        <option [ngValue]="dept.id">{{ dept.name }}</option>
+                        }
+                    </select>
+                </div>
+
+                <!-- 4. Team -->
+                <div class="form-group">
+                    <label for="editTeam">Team</label>
+                    <select id="editTeam" name="teamId" [(ngModel)]="teamId" [disabled]="!departmentId">
+                        <option [ngValue]="null">None</option>
+                        @for (team of departmentTeams; track team.id) {
+                        <option [ngValue]="team.id">{{ team.name }}</option>
+                        }
+                    </select>
+                </div>
+
+                <!-- 5. Designation -->
+                <div class="form-group">
+                    <label for="editDesignation">Designation <span class="required">*</span></label>
+                    <select id="editDesignation" name="designationId" [(ngModel)]="designationId" required>
+                        <option [ngValue]="null">Select Designation</option>
+                        @for (desig of designations; track desig.id) {
+                        <option [ngValue]="desig.id">{{ desig.name }}</option>
+                        }
+                    </select>
+                </div>
+
+                <!-- 6. Supervisor -->
+                <div class="form-group">
+                    <label for="editSupervisor">Supervisor</label>
+                    <select id="editSupervisor" name="supervisorId" [(ngModel)]="supervisorId">
+                        <option [ngValue]="null">None</option>
+                        @for (sup of availableSupervisors; track sup.id) {
+                        <option [ngValue]="sup.id">{{ sup.name }}</option>
+                        }
+                    </select>
+                </div>
+            </div>
+
+            <!-- Modal Footer Actions -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-cancel" (click)="onClose()" [disabled]="isSubmitting">
+                    Cancel
+                </button>
+                <button type="submit" class="btn btn-save" [disabled]="isSubmitting">
+                    {{ isSubmitting ? 'Saving...' : 'Save Changes' }}
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+}
