@@ -13,13 +13,13 @@
 
   <!-- Filters Section -->
   <div class="filter-section">
-    <!-- Search by employee name -->
-    <div class="search-box">
-      <span>⌕</span>
-      <input type="text" placeholder="Search employees..." [(ngModel)]="searchText"
-        (keydown.enter)="searchEmployees()" />
-    </div>
 
+<!-- Search by employee name -->
+<div class="search-box">
+  <span>⌕</span>
+  <input type="text" placeholder="Search employees..." [(ngModel)]="searchText" (ngModelChange)="searchEmployees()"
+  />
+</div>
     <!-- Department filter -->
     <select [(ngModel)]="selectedDepartmentId" (ngModelChange)="onDepartmentChange($event)">
       <option [ngValue]="null">All Departments</option>
