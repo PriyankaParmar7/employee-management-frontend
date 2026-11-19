@@ -11,6 +11,10 @@ export interface DepartmentCountResponse {
   totalDepartments: number;
 }
 
+export interface DesignationCountResponse {
+  totalDesignations: number;
+}
+
 export interface TeamCountResponse {
   totalTeams: number;
 }
@@ -136,6 +140,19 @@ export class DashboardService {
 
     return this.http.get<DepartmentCountResponse>(
       `${environment.apiUrl}/api/Department/count`,
+      { headers }
+    );
+  }
+
+  getDesignationCount(): Observable<DesignationCountResponse> {
+    const token = localStorage.getItem('token');
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`
+    });
+
+    return this.http.get<DesignationCountResponse>(
+      `${environment.apiUrl}/api/Designation/count`,
       { headers }
     );
   }

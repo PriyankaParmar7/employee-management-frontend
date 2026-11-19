@@ -1,4 +1,3 @@
-
 <div class="app-shell">
   <aside class="sidebar">
     <div class="logo">
@@ -9,45 +8,31 @@
     <div class="sidebar-menu">
       <p class="menu-label">MAIN MENU</p>
 
-      <a class="menu-item"
-         routerLink="/dashboard"
-         routerLinkActive="active">
+      <a class="menu-item" routerLink="/dashboard" routerLinkActive="active">
         <span>▦</span> Dashboard
       </a>
 
-      <a class="menu-item"
-         routerLink="/employees"
-         routerLinkActive="active">
+      <a class="menu-item" routerLink="/employees" routerLinkActive="active">
         <span>♙</span> Employees
       </a>
 
-      <a class="menu-item"
-         routerLink="/departments"
-         routerLinkActive="active">
+      <a class="menu-item" routerLink="/departments" routerLinkActive="active">
         <span>▦</span> Departments
       </a>
 
-      <a class="menu-item"
-         routerLink="/teams"
-         routerLinkActive="active">
+      <a class="menu-item" routerLink="/teams" routerLinkActive="active">
         <span>♧</span> Teams
       </a>
 
-      <a class="menu-item"
-         routerLink="/designations"
-         routerLinkActive="active">
+      <a class="menu-item" routerLink="/designations" routerLinkActive="active">
         <span>♙</span> Designations
       </a>
 
-      <a class="menu-item"
-         routerLink="/leaves"
-         routerLinkActive="active">
+      <a class="menu-item" routerLink="/leaves" routerLinkActive="active">
         <span>▢</span> Leave Management
       </a>
 
-      <a class="menu-item"
-         routerLink="/profile"
-         routerLinkActive="active">
+      <a class="menu-item" routerLink="/profile" routerLinkActive="active">
         <span>♙</span> My Profile
       </a>
     </div>
@@ -67,22 +52,28 @@
 
   <main class="main-area">
     <header class="topbar">
-      <button class="menu-toggle" type="button" aria-label="Menu">
-        ☰
-      </button>
-
-      <div class="system-status">
-        <span></span> System Online
+      <div class="topbar-left">
+        <button class="menu-toggle" type="button" aria-label="Menu">☰</button>
+        <div class="system-status">
+          <span></span> System Online
+        </div>
       </div>
 
       <div class="topbar-user">
-        <span class="bell">♧<i></i></span>
+        <span class="bell">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+            <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+          </svg>
+          <i></i>
+        </span>
         <div class="top-avatar">PR</div>
         <div class="top-user-details">
           <strong>Priyanka</strong>
           <span class="role-pill">● Admin</span>
         </div>
-        <span class="chevron">⌄</span>
+        <span class="chevron">&#8964;</span>
       </div>
     </header>
 
@@ -91,4 +82,3 @@
     </div>
   </main>
 </div>
-

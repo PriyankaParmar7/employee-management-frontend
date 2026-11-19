@@ -6,6 +6,7 @@ import { catchError } from 'rxjs/operators';
 import {
   DashboardService,
   Department,
+  Designation,
   Employee,
   EmployeeSearchRequest,
   PendingLeave
@@ -24,8 +25,10 @@ export class Dashboard implements OnInit {
   totalEmployees = signal(0);
   totalDepartments = signal(0);
   totalTeams = signal(0);
+  totalDesignations = signal(0);
   pendingLeaveCount = signal(0);
   departments = signal<Department[]>([]);
+  designations = signal<Designation[]>([]);
 
   employees = signal<Employee[]>([]);
   employeesLoading = signal(false);
@@ -74,6 +77,12 @@ export class Dashboard implements OnInit {
           return of({ totalDepartments: 0 });
         })
       ),
+      designationCount: this.dashboardService.getDesignationCount().pipe(
+        catchError((err) => {
+          console.error('[Dashboard API Error] Designation Count failed:', err);
+          return of({ totalDesignations: 0 });
+        })
+      ),
       departments: this.dashboardService.getDepartments().pipe(
         catchError((err) => {
           console.error('[Dashboard API Error] Departments list failed:', err);
@@ -108,6 +117,7 @@ export class Dashboard implements OnInit {
         this.totalDepartments.set(results.departmentCount.totalDepartments);
         this.departments.set(results.departments);
         this.totalTeams.set(results.teamCount.totalTeams);
+        this.totalDesignations.set(results.designationCount.totalDesignations);
 
         // 2. Set Workforce Directory
         this.employees.set(results.employeeResult.employees || []);
