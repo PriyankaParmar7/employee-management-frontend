@@ -2,7 +2,8 @@ import {
   Component,
   OnInit,
   ChangeDetectionStrategy,
-  ChangeDetectorRef
+  signal,
+  Signal
 } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
@@ -33,35 +34,32 @@ export class Employees implements OnInit {
   // -------------------------------------------------------
   // Data arrays
   // -------------------------------------------------------
-  employees: Employee[] = [];
-  departments: Department[] = [];
-  teams: Team[] = [];
-  designations: Designation[] = [];
+  employees = signal<Employee[]>([]);
+  departments = signal<Department[]>([]);
+  teams = signal<Team[]>([]);
+  designations = signal<Designation[]>([]);
 
   // -------------------------------------------------------
   // UI state
   // -------------------------------------------------------
-  loading = false;
-  errorMessage = '';
-  searchText = '';
+  loading = signal(false);
+  errorMessage = signal('');
+  searchText = ''; //keep as plain text as it is used with [(ngModel)]
 
-  selectedDepartmentId: number | null = null;
-  selectedTeamId: number | null = null;
-  selectedDesignationId: number | null = null;
-  selectedStatus: string | null = null;
-
-  isCreateEmployeeModalOpen = false;
-  isEditEmployeeModelOpen = false;
-  selectedEmployeeToEdit: Employee | null = null;
+  selectedDepartmentId = signal<number | null>(null);
+  selectedTeamId = signal<number | null>(null);
+  selectedDesignationId = signal<number | null>(null);
+  selectedStatus = signal<string | null>(null);
+  isCreateEmployeeModalOpen = signal(false);
+  isEditEmployeeModelOpen = signal(false);
+  selectedEmployeeToEdit = signal<Employee | null>(null);
 
 
   // -------------------------------------------------------
   // Constructor
   // -------------------------------------------------------
   constructor(
-    private dashboardService: DashboardService,
-    private cdr: ChangeDetectorRef
-  ) { }
+    private dashboardService: DashboardService) { }
 
   // -------------------------------------------------------
   // Lifecycle
@@ -80,13 +78,12 @@ export class Employees implements OnInit {
   loadDepartments(): void {
     this.dashboardService.getDepartments().subscribe({
       next: (response) => {
-        this.departments = response;
-        this.cdr.markForCheck();
+        this.departments.set(response);
       },
+
       error: (err: unknown) => {
         console.error('Failed to load departments:', err);
-        this.errorMessage = 'Unable to load departments.';
-        this.cdr.markForCheck();
+        this.errorMessage.set('Unable to load departments.');
       }
     });
   }
@@ -94,28 +91,28 @@ export class Employees implements OnInit {
   loadTeams(): void {
     this.dashboardService.getTeams().subscribe({
       next: (response) => {
-        this.teams = response.filter(team => team.isActive);
-        this.cdr.markForCheck();
+        this.teams.set(response.filter(team => team.isActive));
+
       },
       error: (err: unknown) => {
         console.error('Failed to load teams:', err);
-        this.teams = [];
-        this.cdr.markForCheck();
+        this.teams.set([]);
+
       }
     });
   }
 
   loadTeamsByDepartment(departmentId: number): void {
-    this.teams = [];
+    this.teams.set([]);
     this.dashboardService.getTeamsByDepartment(departmentId).subscribe({
       next: (response) => {
-        this.teams = response.filter(team => team.isActive);
-        this.cdr.markForCheck();
+        this.teams.set(response.filter(team => team.isActive));
+
       },
       error: (err: unknown) => {
         console.error('Failed to load department teams:', err);
-        this.teams = [];
-        this.cdr.markForCheck();
+        this.teams.set([]);
+
       }
     });
   }
@@ -123,13 +120,13 @@ export class Employees implements OnInit {
   loadDesignations(): void {
     this.dashboardService.getDesignations().subscribe({
       next: (response) => {
-        this.designations = response.filter(d => d.isActive);
-        this.cdr.markForCheck();
+        this.designations.set(response.filter(d => d.isActive));
+
       },
       error: (err: unknown) => {
         console.error('Failed to load designations:', err);
-        this.errorMessage = 'Unable to load designations.';
-        this.cdr.markForCheck();
+        this.errorMessage.set('Unable to load designations.');
+
       }
     });
   }
@@ -139,8 +136,8 @@ export class Employees implements OnInit {
   // -------------------------------------------------------
 
   onDepartmentChange(departmentId: number | null): void {
-    this.selectedDepartmentId = departmentId;
-    this.selectedTeamId = null;
+    this.selectedDepartmentId.set(departmentId);
+    this.selectedTeamId.set(null);
 
     if (departmentId !== null) {
       this.loadTeamsByDepartment(departmentId);
@@ -160,17 +157,17 @@ export class Employees implements OnInit {
   // -------------------------------------------------------
 
   searchEmployees(): void {
-    this.loading = true;
-    this.errorMessage = '';
+    this.loading.set(true);
+    this.errorMessage.set('');
 
     const request: EmployeeSearchRequest = {
       page: 1,
       pageSize: 50,
       search: this.searchText.trim(),
-      status: this.selectedStatus,
-      departmentId: this.selectedDepartmentId,
-      teamId: this.selectedTeamId,
-      designationId: this.selectedDesignationId,
+      status: this.selectedStatus(),
+      departmentId: this.selectedDepartmentId(),
+      teamId: this.selectedTeamId(),
+      designationId: this.selectedDesignationId(),
       supervisorId: null,
       sortBy: 'name',
       sortDescending: false
@@ -178,15 +175,15 @@ export class Employees implements OnInit {
 
     this.dashboardService.searchEmployees(request).subscribe({
       next: (response) => {
-        this.employees = response.employees;
-        this.loading = false;
-        this.cdr.markForCheck();
+        this.employees.set(response.employees);
+        this.loading.set(false);
+
       },
       error: (err: unknown) => {
         console.error('Failed to search employees:', err);
-        this.errorMessage = 'Unable to load employees.';
-        this.loading = false;
-        this.cdr.markForCheck();
+        this.errorMessage.set('Unable to load employees.');
+        this.loading.set(false);
+
       }
     });
   }
@@ -196,18 +193,18 @@ export class Employees implements OnInit {
   // -------------------------------------------------------
 
   openCreateModal(): void {
-    this.isCreateEmployeeModalOpen = true;
-    this.cdr.markForCheck();
+    this.isCreateEmployeeModalOpen.set(true);
+
   }
 
   onEmployeeCreated(): void {
-    this.isCreateEmployeeModalOpen = false;
-    this.searchEmployees();
+    this.isCreateEmployeeModalOpen.set(false);
+
   }
 
   onModalClose(): void {
-    this.isCreateEmployeeModalOpen = false;
-    this.cdr.markForCheck();
+    this.isCreateEmployeeModalOpen.set(false);
+
   }
 
   // -------------------------------------------------------
@@ -232,14 +229,14 @@ export class Employees implements OnInit {
   // -------------------------------------------------------
 
   onEdit(employee: Employee): void {
-    this.selectedEmployeeToEdit = employee;
-    this.isEditEmployeeModelOpen = true;
-    this.cdr.markForCheck();
+    this.selectedEmployeeToEdit.set(employee);
+    this.isEditEmployeeModelOpen.set(true);
+
   }
 
   onEmployeeUpdated(): void {
-    this.isEditEmployeeModelOpen = false;
-    this.selectedEmployeeToEdit = null;
+    this.isEditEmployeeModelOpen.set(false);
+    this.selectedEmployeeToEdit.set(null);
     this.searchEmployees(); // Table auto refresh
   }
 
@@ -259,8 +256,8 @@ export class Employees implements OnInit {
     this.dashboardService.updateEmployeeStatus(employee.id, newStatus).subscribe({
       next: () => {
         employee.isActive = newStatus;
-        this.cdr.markForCheck();
       },
+
       error: (err: unknown) => {
         console.error('Failed to update employee status:', err);
         alert('Failed to update employee status. Please try again.');
@@ -281,8 +278,8 @@ export class Employees implements OnInit {
     this.dashboardService.deleteEmployee(employee.id).subscribe({
       next: () => {
         // Remove from local list immediately (no reload needed)
-        this.employees = this.employees.filter(e => e.id !== employee.id);
-        this.cdr.markForCheck();
+        this.employees.set(this.employees().filter(e => e.id !== employee.id));
+
         alert(`${employee.name} has been deleted successfully.`);
       },
       error: (err: unknown) => {

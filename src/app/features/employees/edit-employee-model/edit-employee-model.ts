@@ -1,4 +1,3 @@
-
 import {
     Component,
     Input,
@@ -6,7 +5,7 @@ import {
     EventEmitter,
     OnChanges,
     SimpleChanges,
-    ChangeDetectorRef
+    signal
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -36,7 +35,7 @@ export class EditEmployeeModelComponent implements OnChanges {
     @Output() close = new EventEmitter<void>();
     @Output() employeeUpdated = new EventEmitter<void>();
 
-    departmentTeams: Team[] = [];
+    departmentTeams = signal<Team[]>([]);
 
     // Form Fields
     fullName = '';
@@ -46,12 +45,11 @@ export class EditEmployeeModelComponent implements OnChanges {
     designationId: number | null = null;
     supervisorId: number | null = null;
 
-    isSubmitting = false;
-    errorMessage = '';
+    isSubmitting = signal(false);
+    errorMessage = signal('');
 
     constructor(
-        private dashboardService: DashboardService,
-        private cdr: ChangeDetectorRef
+        private dashboardService: DashboardService
     ) { }
 
     // Employee khud ka supervisor nahi ho sakta
@@ -70,8 +68,8 @@ export class EditEmployeeModelComponent implements OnChanges {
     populateForm(): void {
         if (!this.employee) return;
 
-        this.errorMessage = '';
-        this.isSubmitting = false;
+        this.errorMessage.set('');
+        this.isSubmitting.set(false);
         this.fullName = this.employee.name || '';
         this.email = this.employee.email || '';
 
@@ -97,17 +95,15 @@ export class EditEmployeeModelComponent implements OnChanges {
         if (this.departmentId !== null) {
             this.loadTeamsForDepartment(this.departmentId, this.employee.team);
         } else {
-            this.departmentTeams = [];
+            this.departmentTeams.set([]);
             this.teamId = null;
         }
-
-        this.cdr.markForCheck();
     }
 
     onDepartmentChange(deptId: number | null): void {
         this.departmentId = deptId;
         this.teamId = null;
-        this.departmentTeams = [];
+        this.departmentTeams.set([]);
 
         if (deptId !== null) {
             this.loadTeamsForDepartment(deptId);
@@ -117,20 +113,17 @@ export class EditEmployeeModelComponent implements OnChanges {
     private loadTeamsForDepartment(deptId: number, currentTeamName?: string): void {
         this.dashboardService.getTeamsByDepartment(deptId).subscribe({
             next: (teams) => {
-                this.departmentTeams = teams.filter((t) => t.isActive);
+                this.departmentTeams.set(teams.filter((t) => t.isActive));
 
                 if (currentTeamName) {
-                    const matchedTeam = this.departmentTeams.find(
+                    const matchedTeam = this.departmentTeams().find(
                         (t) => t.name.toLowerCase() === currentTeamName.toLowerCase()
                     );
                     this.teamId = matchedTeam ? matchedTeam.id : null;
                 }
-
-                this.cdr.markForCheck();
             },
             error: (err) => {
                 console.error('Failed to load teams for department:', err);
-                this.cdr.markForCheck();
             }
         });
     }
@@ -138,18 +131,18 @@ export class EditEmployeeModelComponent implements OnChanges {
     onSubmit(): void {
         if (!this.employee) return;
 
-        this.errorMessage = '';
+        this.errorMessage.set('');
 
         if (!this.fullName.trim()) {
-            this.errorMessage = 'Full Name is required.';
+            this.errorMessage.set('Full Name is required.');
             return;
         }
         if (!this.email.trim()) {
-            this.errorMessage = 'Email Address is required.';
+            this.errorMessage.set('Email Address is required.');
             return;
         }
         if (!this.designationId) {
-            this.errorMessage = 'Designation is required.';
+            this.errorMessage.set('Designation is required.');
             return;
         }
 
@@ -162,34 +155,33 @@ export class EditEmployeeModelComponent implements OnChanges {
             supervisorId: this.supervisorId ? Number(this.supervisorId) : null
         };
 
-        this.isSubmitting = true;
+        this.isSubmitting.set(true);
 
         this.dashboardService.updateEmployee(this.employee.id, payload).subscribe({
             next: () => {
-                this.isSubmitting = false;
+                this.isSubmitting.set(false);
                 this.employeeUpdated.emit();
                 this.close.emit();
             },
             error: (error) => {
-                this.isSubmitting = false;
+                this.isSubmitting.set(false);
                 console.error('Failed to update employee:', error);
                 if (typeof error.error === 'string') {
-                    this.errorMessage = error.error;
+                    this.errorMessage.set(error.error);
                 } else if (error.error?.message) {
-                    this.errorMessage = error.error.message;
+                    this.errorMessage.set(error.error.message);
                 } else if (error.error?.errors) {
                     const firstKey = Object.keys(error.error.errors)[0];
-                    this.errorMessage = error.error.errors[firstKey][0];
+                    this.errorMessage.set(error.error.errors[firstKey][0]);
                 } else {
-                    this.errorMessage = 'Failed to update employee. Please check your inputs.';
+                    this.errorMessage.set('Failed to update employee. Please check your inputs.');
                 }
-                this.cdr.markForCheck();
             }
         });
     }
 
     onClose(): void {
-        if (!this.isSubmitting) {
+        if (!this.isSubmitting()) {
             this.close.emit();
         }
     }

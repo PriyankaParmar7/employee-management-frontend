@@ -114,152 +114,98 @@ export interface UpdateEmployeeRequest {
   providedIn: 'root'
 })
 export class DashboardService {
-  private apiUrl = `${environment.apiUrl}/api/Employee/count`;
+  private readonly baseUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) { }
 
-  getEmployeeCount(): Observable<EmployeeCountResponse> {
+  private getAuthHeaders(): { headers: HttpHeaders } {
     const token = localStorage.getItem('token');
+    return {
+      headers: new HttpHeaders({
+        Authorization: `Bearer ${token}`
+      })
+    };
+  }
 
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`
-    });
-
+  getEmployeeCount(): Observable<EmployeeCountResponse> {
     return this.http.get<EmployeeCountResponse>(
-      this.apiUrl,
-      { headers }
+      `${this.baseUrl}/api/Employee/count`,
+      this.getAuthHeaders()
     );
   }
 
   getDepartmentCount(): Observable<DepartmentCountResponse> {
-    const token = localStorage.getItem('token');
-
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`
-    });
-
     return this.http.get<DepartmentCountResponse>(
-      `${environment.apiUrl}/api/Department/count`,
-      { headers }
+      `${this.baseUrl}/api/Department/count`,
+      this.getAuthHeaders()
     );
   }
 
   getDesignationCount(): Observable<DesignationCountResponse> {
-    const token = localStorage.getItem('token');
-
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`
-    });
-
     return this.http.get<DesignationCountResponse>(
-      `${environment.apiUrl}/api/Designation/count`,
-      { headers }
+      `${this.baseUrl}/api/Designation/count`,
+      this.getAuthHeaders()
     );
   }
 
   getTeamCount(): Observable<TeamCountResponse> {
-    const token = localStorage.getItem('token');
-
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`
-    });
-
     return this.http.get<TeamCountResponse>(
-      `${environment.apiUrl}/api/Team/count`,
-      { headers }
+      `${this.baseUrl}/api/Team/count`,
+      this.getAuthHeaders()
     );
   }
 
   getPendingLeaves(): Observable<PendingLeave[]> {
-    const token = localStorage.getItem('token');
-
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`
-    });
-
-    return this.http.get<any[]>(
-      `${environment.apiUrl}/api/Leave/pending`,
-      { headers }
+    return this.http.get<PendingLeave[]>(
+      `${this.baseUrl}/api/Leave/pending`,
+      this.getAuthHeaders()
     );
   }
 
   getDepartments(): Observable<Department[]> {
-    const token = localStorage.getItem('token');
-
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`
-    });
-
     return this.http.get<Department[]>(
-      `${environment.apiUrl}/api/Department`,
-      { headers }
+      `${this.baseUrl}/api/Department`,
+      this.getAuthHeaders()
     );
   }
 
-  searchEmployees(
-    request: EmployeeSearchRequest
-  ): Observable<EmployeeSearchResponse> {
-    const token = localStorage.getItem('token');
-
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`
-    });
-
+  searchEmployees(request: EmployeeSearchRequest): Observable<EmployeeSearchResponse> {
     return this.http.post<EmployeeSearchResponse>(
-      `${environment.apiUrl}/api/Employee/search`,
+      `${this.baseUrl}/api/Employee/search`,
       request,
-      { headers }
+      this.getAuthHeaders()
     );
   }
 
   getTeams(): Observable<Team[]> {
-    const token = localStorage.getItem('token');
-
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`
-    });
-
     return this.http.get<Team[]>(
-      `${environment.apiUrl}/api/Team`,
-      { headers }
+      `${this.baseUrl}/api/Team`,
+      this.getAuthHeaders()
     );
   }
 
   getTeamsByDepartment(departmentId: number): Observable<Team[]> {
-    const token = localStorage.getItem('token');
-
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`
-    });
-
     return this.http.get<Team[]>(
-      `${environment.apiUrl}/api/Department/${departmentId}/teams`,
-      { headers }
+      `${this.baseUrl}/api/Department/${departmentId}/teams`,
+      this.getAuthHeaders()
     );
   }
 
   getDesignations(): Observable<Designation[]> {
-    const token = localStorage.getItem('token');
-
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`
-    });
-
     return this.http.get<Designation[]>(
-      `${environment.apiUrl}/api/Designation`,
-      { headers }
+      `${this.baseUrl}/api/Designation`,
+      this.getAuthHeaders()
     );
   }
 
   createEmployee(request: CreateEmployeeRequest): Observable<string> {
     const token = localStorage.getItem('token');
-
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}`
     });
 
     return this.http.post(
-      `${environment.apiUrl}/api/Employee`,
+      `${this.baseUrl}/api/Employee`,
       request,
       { headers, responseType: 'text' }
     );
@@ -272,7 +218,7 @@ export class DashboardService {
     });
 
     return this.http.put(
-      `${environment.apiUrl}/api/Employee/${id}/status`,
+      `${this.baseUrl}/api/Employee/${id}/status`,
       { isActive },
       { headers, responseType: 'text' }
     );
@@ -285,31 +231,26 @@ export class DashboardService {
     });
 
     return this.http.delete(
-      `${environment.apiUrl}/api/Employee/${id}`,
+      `${this.baseUrl}/api/Employee/${id}`,
       { headers, responseType: 'text' }
     );
   }
 
   getEmployeeById(id: number): Observable<Employee> {
-    const token = localStorage.getItem('token');
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`
-    });
-
     return this.http.get<Employee>(
-      `${environment.apiUrl}/api/Employee/${id}`,
-      { headers }
+      `${this.baseUrl}/api/Employee/${id}`,
+      this.getAuthHeaders()
     );
   }
 
-  updateEmployee(id: number, request: any): Observable<string> {
+  updateEmployee(id: number, request: UpdateEmployeeRequest): Observable<string> {
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}`
     });
 
     return this.http.put(
-      `${environment.apiUrl}/api/Employee/${id}`,
+      `${this.baseUrl}/api/Employee/${id}`,
       request,
       { headers, responseType: 'text' }
     );

@@ -4,15 +4,15 @@
         <!-- Modal Header -->
         <div class="modal-header">
             <h2>Edit Employee: {{ employee?.name }}</h2>
-            <button type="button" class="close-btn" (click)="onClose()" [disabled]="isSubmitting" aria-label="Close">
+            <button type="button" class="close-btn" (click)="onClose()" [disabled]="isSubmitting()" aria-label="Close">
                 ✕
             </button>
         </div>
 
         <!-- Error Alert -->
-        @if (errorMessage) {
+        @if (errorMessage()) {
         <div class="error-banner">
-            <span>⚠️</span> {{ errorMessage }}
+            <span>⚠️</span> {{ errorMessage() }}
         </div>
         }
 
@@ -50,7 +50,7 @@
                     <label for="editTeam">Team</label>
                     <select id="editTeam" name="teamId" [(ngModel)]="teamId" [disabled]="!departmentId">
                         <option [ngValue]="null">None</option>
-                        @for (team of departmentTeams; track team.id) {
+                        @for (team of departmentTeams(); track team.id) {
                         <option [ngValue]="team.id">{{ team.name }}</option>
                         }
                     </select>
@@ -81,11 +81,11 @@
 
             <!-- Modal Footer Actions -->
             <div class="modal-footer">
-                <button type="button" class="btn btn-cancel" (click)="onClose()" [disabled]="isSubmitting">
+                <button type="button" class="btn btn-cancel" (click)="onClose()" [disabled]="isSubmitting()">
                     Cancel
                 </button>
-                <button type="submit" class="btn btn-save" [disabled]="isSubmitting">
-                    {{ isSubmitting ? 'Saving...' : 'Save Changes' }}
+                <button type="submit" class="btn btn-save" [disabled]="isSubmitting()">
+                    {{ isSubmitting() ? 'Saving...' : 'Save Changes' }}
                 </button>
             </div>
         </form>

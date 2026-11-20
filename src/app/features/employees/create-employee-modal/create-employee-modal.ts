@@ -5,7 +5,7 @@ import {
   EventEmitter,
   OnChanges,
   SimpleChanges,
-  ChangeDetectorRef
+  signal
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -47,7 +47,7 @@ export class CreateEmployeeModalComponent implements OnChanges {
   ];
 
   // Teams filtered by the selected department in the modal
-  departmentTeams: Team[] = [];
+  departmentTeams = signal<Team[]>([]);
 
   // Form Fields
   fullName = '';
@@ -60,13 +60,12 @@ export class CreateEmployeeModalComponent implements OnChanges {
   supervisorId: number | null = null;
 
   // State management
-  isSubmitting = false;
-  errorMessage = '';
+  isSubmitting = signal(false);
+  errorMessage = signal('');
 
   constructor(
-    private dashboardService: DashboardService,
-    private cdr: ChangeDetectorRef
-  ) {}
+    private dashboardService: DashboardService
+  ) { }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['isOpen'] && this.isOpen) {
@@ -78,44 +77,42 @@ export class CreateEmployeeModalComponent implements OnChanges {
   onDepartmentChange(deptId: number | null): void {
     this.departmentId = deptId;
     this.teamId = null;
-    this.departmentTeams = [];
+    this.departmentTeams.set([]);
 
     if (deptId !== null) {
       this.dashboardService.getTeamsByDepartment(deptId).subscribe({
         next: (teams) => {
-          this.departmentTeams = teams.filter((t) => t.isActive);
-          this.cdr.markForCheck();
+          this.departmentTeams.set(teams.filter((t) => t.isActive));
         },
         error: (err) => {
           console.error('Failed to load teams for department:', err);
-          this.cdr.markForCheck();
         }
       });
     }
   }
 
   onSubmit(): void {
-    this.errorMessage = '';
+    this.errorMessage.set('');
 
     // Validation for required fields
     if (!this.fullName.trim()) {
-      this.errorMessage = 'Full Name is required.';
+      this.errorMessage.set('Full Name is required.');
       return;
     }
     if (!this.username.trim()) {
-      this.errorMessage = 'Username is required.';
+      this.errorMessage.set('Username is required.');
       return;
     }
     if (!this.email.trim()) {
-      this.errorMessage = 'Email Address is required.';
+      this.errorMessage.set('Email Address is required.');
       return;
     }
     if (!this.roleId) {
-      this.errorMessage = 'System Role is required.';
+      this.errorMessage.set('System Role is required.');
       return;
     }
     if (!this.designationId) {
-      this.errorMessage = 'Designation is required.';
+      this.errorMessage.set('Designation is required.');
       return;
     }
 
@@ -130,32 +127,31 @@ export class CreateEmployeeModalComponent implements OnChanges {
       supervisorId: this.supervisorId ? Number(this.supervisorId) : null
     };
 
-    this.isSubmitting = true;
+    this.isSubmitting.set(true);
 
     this.dashboardService.createEmployee(payload).subscribe({
       next: () => {
-        this.isSubmitting = false;
+        this.isSubmitting.set(false);
         this.resetForm();
         this.employeeCreated.emit();
         this.close.emit();
       },
       error: (error) => {
-        this.isSubmitting = false;
+        this.isSubmitting.set(false);
         console.error('Failed to create employee:', error);
         if (typeof error.error === 'string') {
-          this.errorMessage = error.error;
+          this.errorMessage.set(error.error);
         } else if (error.error?.message) {
-          this.errorMessage = error.error.message;
+          this.errorMessage.set(error.error.message);
         } else {
-          this.errorMessage = 'Failed to create employee. Please check your inputs.';
+          this.errorMessage.set('Failed to create employee. Please check your inputs.');
         }
-        this.cdr.markForCheck();
       }
     });
   }
 
   onClose(): void {
-    if (!this.isSubmitting) {
+    if (!this.isSubmitting()) {
       this.resetForm();
       this.close.emit();
     }
@@ -170,8 +166,8 @@ export class CreateEmployeeModalComponent implements OnChanges {
     this.teamId = null;
     this.designationId = null;
     this.supervisorId = null;
-    this.departmentTeams = [];
-    this.errorMessage = '';
-    this.isSubmitting = false;
+    this.departmentTeams.set([]);
+    this.errorMessage.set('');
+    this.isSubmitting.set(false);
   }
 }
